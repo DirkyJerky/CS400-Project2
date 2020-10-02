@@ -1,5 +1,5 @@
 # No sharing RBTree Implementation
-src/RBTree/*
+src/RBTree/*.java
 
 # Eclipse files
 .classpath
