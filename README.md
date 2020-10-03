@@ -1,4 +1,4 @@
-## CS400 Team BD Project 2:  TBD
+## CS400 Team BD Project 2:  Twitter Stream
 Project Description TBD
 
 ## Important links
