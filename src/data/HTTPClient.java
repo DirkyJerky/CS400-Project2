@@ -8,20 +8,28 @@ import okhttp3.Response;
 
 public class HTTPClient {
 
-    OkHttpClient client;
+    private OkHttpClient client;
+    public static final MediaType JSON
+            = MediaType.get("application/json; charset=utf-8");
 
     public HTTPClient() {
         client = new OkHttpClient();
     }
 
-    public void sendPostRequest(String urlString, String requestBody) {
+    public void sendPostRequest(TwitterRequestObject requestObject) {
+        RequestBody body = RequestBody.create(requestObject.getJsonBody(), JSON);
         Request request = new Request.Builder()
-                                .header("Authorization", "TOKEN")
-                                .url(urlString)
+                                .header("Authorization", "Bearer " + "AAAAAAAAAAAAAAAAAAAAAJgiIQEAAAAASKsySmauclKIif2r1nVEQzley5w%3DYCjJQMOgBwX3qoLummZYAuOAVx32ehjuK5DBZoM4ntGa84DtPV")
+                                .url(requestObject.getUrl())
+                                .method("POST", body)
                                 .build();
     }
 
-    public void sendGetRequest(String urlString, String requestBody) {
+    public void sendOneTimeGetRequest(TwitterRequestObject requestObject) {
+
+    }
+
+    public void sendStreamedGetRequest(String urlString, String requestBody) {
 
     }
 
