@@ -4,15 +4,21 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import java.awt.BorderLayout;
+import java.awt.Cursor;
+import java.awt.Dimension;
+
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.JToggleButton;
 import javax.swing.SwingConstants;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class TweetStream {
 
@@ -51,14 +57,16 @@ public class TweetStream {
 		frame.setBounds(100, 100, 450, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(new BorderLayout(0, 0));
+
 		
 		JPanel panelMenu = new JPanel();
+		panelMenu.setPreferredSize(new Dimension(300, 500));
 		frame.getContentPane().add(panelMenu, BorderLayout.WEST);
 		GridBagLayout gbl_panelMenu = new GridBagLayout();
 		gbl_panelMenu.columnWidths = new int[]{145, 0};
-		gbl_panelMenu.rowHeights = new int[]{26, 26, 26, 26, 26, 0, 0};
+		gbl_panelMenu.rowHeights = new int[]{26, 26, 26, 26, 26, 0, 0, 0};
 		gbl_panelMenu.columnWeights = new double[]{1.0, Double.MIN_VALUE};
-		gbl_panelMenu.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
+		gbl_panelMenu.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE, 0.0};
 		panelMenu.setLayout(gbl_panelMenu);
 		
 		JLabel labelTitle = new JLabel("Tweet Stream");
@@ -70,7 +78,51 @@ public class TweetStream {
 		gbc_labelTitle.gridy = 0;
 		panelMenu.add(labelTitle, gbc_labelTitle);
 		
-		JButton buttonStreamToggle = new JButton("Start Streaming");
+		JToggleButton buttonStreamToggle = new JToggleButton("Start Streaming");
+		buttonStreamToggle.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				if (event.getActionCommand() == "Start Streaming") {
+					if (true) { // TODO Test if rules are set, and the app is ready to go
+						buttonStreamToggle.setEnabled(false);
+						buttonStreamToggle.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+						
+						EventQueue.invokeLater(new Runnable() {
+							public void run() {
+								try {
+									// TODO:  Start streaming, then wait till we are running
+									
+									buttonStreamToggle.setText("Stop Streaming");
+									buttonStreamToggle.setEnabled(true);
+									buttonStreamToggle.setCursor(Cursor.getDefaultCursor());
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
+							}
+						});
+					} else {
+						buttonStreamToggle.setSelected(false);
+					}
+				} else if (event.getActionCommand() == "Stop Streaming") {
+					buttonStreamToggle.setEnabled(false);
+					buttonStreamToggle.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+
+					EventQueue.invokeLater(new Runnable() {
+						public void run() {
+							try {
+								// TODO:  Wait till we have stopped streaming
+								
+								buttonStreamToggle.setText("Start Streaming");
+								buttonStreamToggle.setEnabled(true);
+								buttonStreamToggle.setCursor(Cursor.getDefaultCursor());
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
+						}
+					});
+				}
+			}
+		});
+		buttonStreamToggle.setMargin(new Insets(3,0,3,0));
 		GridBagConstraints gbc_buttonStreamToggle = new GridBagConstraints();
 		gbc_buttonStreamToggle.fill = GridBagConstraints.BOTH;
 		gbc_buttonStreamToggle.insets = new Insets(0, 0, 5, 0);
@@ -107,46 +159,24 @@ public class TweetStream {
 		JScrollPane scrollpaneRules = new JScrollPane();
 		GridBagConstraints gbc_scrollpaneRules = new GridBagConstraints();
 		gbc_scrollpaneRules.insets = new Insets(0, 0, 5, 0);
-		gbc_scrollpaneRules.fill = GridBagConstraints.VERTICAL;
+		gbc_scrollpaneRules.fill = GridBagConstraints.BOTH;
 		gbc_scrollpaneRules.gridx = 0;
 		gbc_scrollpaneRules.gridy = 4;
 		gbc_scrollpaneRules.gridheight = GridBagConstraints.REMAINDER;
 		panelMenu.add(scrollpaneRules, gbc_scrollpaneRules);
 		
-		JPanel panelRules = new JPanel();
+		RulesPanel panelRules = new RulesPanel();
 		scrollpaneRules.setViewportView(panelRules);
-		GridBagLayout gbl_panelRules = new GridBagLayout();
-		gbl_panelRules.columnWidths = new int[]{0, 0};
-		gbl_panelRules.rowHeights = new int[]{0, 0, 0, 0};
-		gbl_panelRules.columnWeights = new double[]{0.0, Double.MIN_VALUE};
-		gbl_panelRules.rowWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
-		panelRules.setLayout(gbl_panelRules);
-		
-		JLabel lblNewLabel = new JLabel("TODO: Rules go here");
-		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
-		gbc_lblNewLabel.insets = new Insets(0, 0, 5, 0);
-		gbc_lblNewLabel.gridx = 0;
-		gbc_lblNewLabel.gridy = 0;
-		panelRules.add(lblNewLabel, gbc_lblNewLabel);
-		
-		JLabel lblNewLabel_1 = new JLabel("TODO: Rules go here");
-		GridBagConstraints gbc_lblNewLabel_1 = new GridBagConstraints();
-		gbc_lblNewLabel_1.insets = new Insets(0, 0, 5, 0);
-		gbc_lblNewLabel_1.gridx = 0;
-		gbc_lblNewLabel_1.gridy = 1;
-		panelRules.add(lblNewLabel_1, gbc_lblNewLabel_1);
-		
-		JButton buttonAddNewRule = new JButton("Add new Rule");
-		GridBagConstraints gbc_buttonAddNewRule = new GridBagConstraints();
-		gbc_buttonAddNewRule.gridx = 0;
-		gbc_buttonAddNewRule.gridy = 2;
-		panelRules.add(buttonAddNewRule, gbc_buttonAddNewRule);
 		
 		JScrollPane scrollpaneTweetViewer = new JScrollPane();
+		scrollpaneTweetViewer.setPreferredSize(new Dimension(1000, 0));
 		frame.getContentPane().add(scrollpaneTweetViewer, BorderLayout.CENTER);
 		
 		JPanel panelTweetViewer = new JPanel();
 		scrollpaneTweetViewer.setViewportView(panelTweetViewer);
+		
+		frame.pack();
+		frame.setVisible(true);
 	}
 
 }
