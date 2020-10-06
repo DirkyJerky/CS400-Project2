@@ -1,26 +1,22 @@
 package frontend;
 
-import java.awt.Component;
-
-import javax.swing.JTextField;
-
 import frontend.JFilteredTextField.FilterType;
 
 enum RuleType {
-	KEYWORD("Keyword", "keyword", new JTextField()),
-	HASHTAG("Hashtag (#)", "#", new JFilteredTextField(FilterType.HASHTAG)),
-	MENTIONS("Mentions user", "@", new JFilteredTextField(FilterType.USERNAME)),
-	FROM_USER("By user", "from:", new JFilteredTextField(FilterType.USERNAME)),
-	TO_USER("To user", "to:", new JFilteredTextField(FilterType.USERNAME));
+	KEYWORD("Keyword", "keyword", FilterType.NORMAL),
+	HASHTAG("Hashtag (#)", "#", FilterType.HASHTAG),
+	MENTIONS("Mentions user", "@", FilterType.USERNAME),
+	FROM_USER("By user", "from:", FilterType.USERNAME),
+	TO_USER("To user", "to:", FilterType.USERNAME);
 	// TODO:  Add the rest according to https://developer.twitter.com/en/docs/twitter-api/tweets/filtered-stream/integrate/build-a-rule
 	
-	private final String name; // Name of the rule displayed to the user
-	private final String label; // Name of the rule constructed in the query to twitter
-	private final Component auxComponent; // The component to be displayed when this rule is selected in the dropdown
-	RuleType(String name, String label, Component auxillaryComponent) {
+	final String name; // Name of the rule displayed to the user
+	final String label; // Name of the rule constructed in the query to twitter
+	final FilterType filterType; // The filter to be applied to the Text Field
+	RuleType(String name, String label, FilterType filterType) {
 		this.name = name;
 		this.label = label;
-		this.auxComponent = auxillaryComponent;
+		this.filterType = filterType;
 	}
 	
 	@Override

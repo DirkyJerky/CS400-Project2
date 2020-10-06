@@ -1,13 +1,16 @@
 package frontend;
 
 import javax.swing.JPanel;
+
+import frontend.JFilteredTextField.FilterType;
+
 import javax.swing.JButton;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import javax.swing.JComboBox;
-import javax.swing.JLabel;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -19,12 +22,13 @@ public class RulePanel extends JPanel {
 	
 	JButton buttonRemoveRule;
 	JComboBox comboboxSelectRuleType;
+	JFilteredTextField filteredTextField;
 	
 	public RulePanel() {
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{15, 85, 100, 0};
 		gridBagLayout.rowHeights = new int[]{20, 0};
-		gridBagLayout.columnWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gridBagLayout.columnWeights = new double[]{0.0, 0.0, 1.0, Double.MIN_VALUE};
 		gridBagLayout.rowWeights = new double[]{0.0, Double.MIN_VALUE};
 		setLayout(gridBagLayout);
 		
@@ -48,25 +52,28 @@ public class RulePanel extends JPanel {
 		gbc_buttonRemoveRule.gridy = 0;
 		this.add(buttonRemoveRule, gbc_buttonRemoveRule);
 		
-		this.comboboxSelectRuleType = new JComboBox();
-		for (RuleType type : RuleType.values()) {
-			this.comboboxSelectRuleType.addItem(type);
-		}
+		this.comboboxSelectRuleType = new JComboBox(RuleType.values());
+		comboboxSelectRuleType.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				if (event.getActionCommand() == "comboBoxChanged" && filteredTextField != null) {
+					RuleType selectedType = (RuleType) comboboxSelectRuleType.getSelectedItem();
+					filteredTextField.updateFilterType(selectedType.filterType);
+				}
+			}
+		});
 		GridBagConstraints gbc_comboboxSelectRuleType = new GridBagConstraints();
 		gbc_comboboxSelectRuleType.fill = GridBagConstraints.HORIZONTAL;
 		gbc_comboboxSelectRuleType.gridx = 1;
 		gbc_comboboxSelectRuleType.gridy = 0;
 		add(comboboxSelectRuleType, gbc_comboboxSelectRuleType);
 		
-		JPanel auxComponentSpace = new JPanel();
-		GridBagConstraints gbc_auxComponentSpace = new GridBagConstraints();
-		gbc_auxComponentSpace.insets = new Insets(0, 5, 0, 0);
-		gbc_auxComponentSpace.gridx = 2;
-		gbc_auxComponentSpace.gridy = 0;
-		this.add(auxComponentSpace, gbc_auxComponentSpace);
-		
-		JLabel lblNewLabel = new JLabel("Select rule type");
-		auxComponentSpace.add(lblNewLabel);
+		filteredTextField = new JFilteredTextField(FilterType.NORMAL);
+		filteredTextField.setPreferredSize(new Dimension(100, 25));
+		GridBagConstraints gbc_filteredTextField = new GridBagConstraints();
+		gbc_filteredTextField.insets = new Insets(0, 5, 0, 0);
+		gbc_filteredTextField.gridx = 2;
+		gbc_filteredTextField.gridy = 0;
+		this.add(filteredTextField, gbc_filteredTextField);
 	}
 	
 	

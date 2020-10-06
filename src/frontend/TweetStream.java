@@ -47,9 +47,6 @@ public class TweetStream {
 		});
 	}
 
-	/**
-	 * Create the application.
-	 */
 	public TweetStream() {
 		initialize();
 	}
@@ -65,7 +62,7 @@ public class TweetStream {
 
 		
 		JPanel panelMenu = new JPanel();
-		panelMenu.setPreferredSize(new Dimension(300, 500));
+		panelMenu.setPreferredSize(new Dimension(250, 500));
 		frame.getContentPane().add(panelMenu, BorderLayout.WEST);
 		GridBagLayout gbl_panelMenu = new GridBagLayout();
 		gbl_panelMenu.columnWidths = new int[]{145, 0};
