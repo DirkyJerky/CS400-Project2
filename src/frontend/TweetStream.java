@@ -23,8 +23,13 @@ import java.awt.event.ActionEvent;
 public class TweetStream {
 
 	private JFrame frame;
+	private JToggleButton buttonStreamToggle;
+	private JButton buttonGotoN;
 	private JTextField textGotoN;
 	private JTextField textFilterText;
+	private RulesPanel panelRules;
+	private TweetViewerPanel scrollpaneTweetViewer;
+	
 
 	/**
 	 * Launch the application.
@@ -78,7 +83,7 @@ public class TweetStream {
 		gbc_labelTitle.gridy = 0;
 		panelMenu.add(labelTitle, gbc_labelTitle);
 		
-		JToggleButton buttonStreamToggle = new JToggleButton("Start Streaming");
+		buttonStreamToggle = new JToggleButton("Start Streaming");
 		buttonStreamToggle.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				if (event.getActionCommand() == "Start Streaming") {
@@ -139,7 +144,7 @@ public class TweetStream {
 		panelMenu.add(panelGotoN, gbc_panelGotoN);
 		panelGotoN.setLayout(new BorderLayout(0, 0));
 		
-		JButton buttonGotoN = new JButton("Goto N");
+		buttonGotoN = new JButton("Goto N");
 		panelGotoN.add(buttonGotoN, BorderLayout.WEST);
 		
 		textGotoN = new JTextField();
@@ -165,15 +170,11 @@ public class TweetStream {
 		gbc_scrollpaneRules.gridheight = GridBagConstraints.REMAINDER;
 		panelMenu.add(scrollpaneRules, gbc_scrollpaneRules);
 		
-		RulesPanel panelRules = new RulesPanel();
+		panelRules = new RulesPanel();
 		scrollpaneRules.setViewportView(panelRules);
 		
-		JScrollPane scrollpaneTweetViewer = new JScrollPane();
-		scrollpaneTweetViewer.setPreferredSize(new Dimension(1000, 0));
+		scrollpaneTweetViewer = new TweetViewerPanel();
 		frame.getContentPane().add(scrollpaneTweetViewer, BorderLayout.CENTER);
-		
-		JPanel panelTweetViewer = new JPanel();
-		scrollpaneTweetViewer.setViewportView(panelTweetViewer);
 		
 		frame.pack();
 		frame.setVisible(true);
