@@ -63,6 +63,8 @@ public class RulesPanel extends JPanel {
 		this.rules.add(newRule);
 		
 		this.resyncRules();
+		
+		this.rules.get(this.rules.size() - 1).comboboxSelectRuleType.requestFocus();
 	}
 	
 	// Re-add all the rules objects in order
@@ -85,6 +87,7 @@ public class RulesPanel extends JPanel {
 	public void removeRule(RulePanel rulePanel) {
 		if (this.rules.remove(rulePanel)) {
 			this.resyncRules();
+			this.buttonAddNewRule.requestFocus();
 		}
 	}
 	

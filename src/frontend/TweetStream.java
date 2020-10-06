@@ -29,7 +29,7 @@ public class TweetStream {
 	private JToggleButton buttonStreamToggle;
 	private JButton buttonGotoN;
 	private JTextField textGotoN;
-	private JTextField textFilterText;
+	private JPlaceholderTextField textFilterText;
 	private RulesPanel panelRules;
 	private TweetViewerPanel scrollpaneTweetViewer;
 	
@@ -165,8 +165,8 @@ public class TweetStream {
 		panelGotoN.add(textGotoN, BorderLayout.CENTER);
 		textGotoN.setColumns(3);
 		
-		textFilterText = new JTextField();
-		textFilterText.setToolTipText("Filter Text");
+		textFilterText = new JPlaceholderTextField();
+		textFilterText.setPlaceholder("Search");
 		GridBagConstraints gbc_textFilterText = new GridBagConstraints();
 		gbc_textFilterText.fill = GridBagConstraints.BOTH;
 		gbc_textFilterText.insets = new Insets(0, 0, 5, 0);
