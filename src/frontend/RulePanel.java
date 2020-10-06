@@ -76,6 +76,11 @@ public class RulePanel extends JPanel {
 		this.add(filteredTextField, gbc_filteredTextField);
 	}
 	
-	
+	@Override
+	public void setEnabled(boolean enabled) {
+		for (Component comp : this.getComponents()) {
+			comp.setEnabled(enabled);
+		}
+	}
 
 }

@@ -1,5 +1,6 @@
 package frontend; 
 
+import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.util.ArrayList;
@@ -18,22 +19,30 @@ public class RulesPanel extends JPanel {
 	static {
 		relativeGBC.gridx = 0;
 		relativeGBC.gridy = GridBagConstraints.RELATIVE;
+		relativeGBC.anchor = GridBagConstraints.NORTH;
+		relativeGBC.weighty = 0.0;
 	}
 	
 	JButton buttonAddNewRule;
 	List<RulePanel> rules;
+	
+	JPanel fillerComp;
+	GridBagConstraints gbc_fillerComp;
 	
 	public RulesPanel() {
 		super();
 		
 		this.rules = new ArrayList<>(MAX_RULES);
 		
-		GridBagLayout gbl_panelRules = new GridBagLayout();
-		gbl_panelRules.columnWidths = new int[]{0};
-		gbl_panelRules.rowHeights = new int[]{25, 25, 25, 25, 25, 25, 25, 25, 25, 25};
-		gbl_panelRules.columnWeights = new double[]{0.0, Double.MIN_VALUE};
-		gbl_panelRules.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
-		this.setLayout(gbl_panelRules);
+		fillerComp = new JPanel();
+		gbc_fillerComp = new GridBagConstraints();
+		gbc_fillerComp.gridx = 0;
+		gbc_fillerComp.gridy = GridBagConstraints.RELATIVE;
+		gbc_fillerComp.anchor = GridBagConstraints.NORTH;
+		gbc_fillerComp.weighty = 1.0;
+		gbc_fillerComp.fill = GridBagConstraints.BOTH;
+		
+		this.setLayout(new GridBagLayout());
 		
 		buttonAddNewRule = new JButton("Add new Rule");
 		buttonAddNewRule.addActionListener(new ActionListener() {
@@ -67,6 +76,8 @@ public class RulesPanel extends JPanel {
 			this.add(this.buttonAddNewRule, relativeGBC);
 		}
 		
+		this.add(this.fillerComp, this.gbc_fillerComp);
+		
 		this.revalidate();
 		this.repaint();
 	}
@@ -74,6 +85,13 @@ public class RulesPanel extends JPanel {
 	public void removeRule(RulePanel rulePanel) {
 		if (this.rules.remove(rulePanel)) {
 			this.resyncRules();
+		}
+	}
+	
+	@Override
+	public void setEnabled(boolean enabled) {
+		for (Component comp : this.getComponents()) {
+			comp.setEnabled(enabled);
 		}
 	}
 }

@@ -10,6 +10,7 @@ import java.awt.Dimension;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
@@ -23,6 +24,8 @@ import java.awt.event.ActionEvent;
 public class TweetStream {
 
 	private JFrame frame;
+	private JLabel labelTitle;
+	private JComboBox comboboxStreamSelector;
 	private JToggleButton buttonStreamToggle;
 	private JButton buttonGotoN;
 	private JTextField textGotoN;
@@ -54,6 +57,7 @@ public class TweetStream {
 	/**
 	 * Initialize the contents of the frame.
 	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" }) // My GUI builder doesn't like parameterized combo boxes
 	private void initialize() {
 		frame = new JFrame();
 		frame.setBounds(100, 100, 450, 300);
@@ -71,7 +75,7 @@ public class TweetStream {
 		gbl_panelMenu.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE, 0.0};
 		panelMenu.setLayout(gbl_panelMenu);
 		
-		JLabel labelTitle = new JLabel("Tweet Stream");
+		labelTitle = new JLabel("Tweet Stream");
 		labelTitle.setHorizontalAlignment(SwingConstants.CENTER);
 		GridBagConstraints gbc_labelTitle = new GridBagConstraints();
 		gbc_labelTitle.fill = GridBagConstraints.BOTH;
@@ -80,6 +84,13 @@ public class TweetStream {
 		gbc_labelTitle.gridy = 0;
 		panelMenu.add(labelTitle, gbc_labelTitle);
 		
+		comboboxStreamSelector = new JComboBox(StreamSource.values());
+		GridBagConstraints gbc_comboboxStreamSelector = new GridBagConstraints();
+		gbc_comboboxStreamSelector.insets = new Insets(0, 0, 5, 0);
+		gbc_comboboxStreamSelector.gridx = 0;
+		gbc_comboboxStreamSelector.gridy = 1;
+		panelMenu.add(comboboxStreamSelector, gbc_comboboxStreamSelector);
+		
 		buttonStreamToggle = new JToggleButton("Start Streaming");
 		buttonStreamToggle.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
@@ -87,6 +98,9 @@ public class TweetStream {
 					if (true) { // TODO Test if rules are set, and the app is ready to go
 						buttonStreamToggle.setEnabled(false);
 						buttonStreamToggle.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+						
+						comboboxStreamSelector.setEnabled(false);
+						panelRules.setEnabled(false);
 						
 						EventQueue.invokeLater(new Runnable() {
 							public void run() {
@@ -116,6 +130,9 @@ public class TweetStream {
 								buttonStreamToggle.setText("Start Streaming");
 								buttonStreamToggle.setEnabled(true);
 								buttonStreamToggle.setCursor(Cursor.getDefaultCursor());
+
+								comboboxStreamSelector.setEnabled(true);
+								panelRules.setEnabled(true);
 							} catch (Exception e) {
 								e.printStackTrace();
 							}
@@ -129,7 +146,7 @@ public class TweetStream {
 		gbc_buttonStreamToggle.fill = GridBagConstraints.BOTH;
 		gbc_buttonStreamToggle.insets = new Insets(0, 0, 5, 0);
 		gbc_buttonStreamToggle.gridx = 0;
-		gbc_buttonStreamToggle.gridy = 1;
+		gbc_buttonStreamToggle.gridy = 2;
 		panelMenu.add(buttonStreamToggle, gbc_buttonStreamToggle);
 		
 		JPanel panelGotoN = new JPanel();
@@ -137,7 +154,7 @@ public class TweetStream {
 		gbc_panelGotoN.fill = GridBagConstraints.BOTH;
 		gbc_panelGotoN.insets = new Insets(0, 0, 5, 0);
 		gbc_panelGotoN.gridx = 0;
-		gbc_panelGotoN.gridy = 2;
+		gbc_panelGotoN.gridy = 3;
 		panelMenu.add(panelGotoN, gbc_panelGotoN);
 		panelGotoN.setLayout(new BorderLayout(0, 0));
 		
@@ -154,16 +171,17 @@ public class TweetStream {
 		gbc_textFilterText.fill = GridBagConstraints.BOTH;
 		gbc_textFilterText.insets = new Insets(0, 0, 5, 0);
 		gbc_textFilterText.gridx = 0;
-		gbc_textFilterText.gridy = 3;
+		gbc_textFilterText.gridy = 4;
 		panelMenu.add(textFilterText, gbc_textFilterText);
 		textFilterText.setColumns(10);
 		
 		JScrollPane scrollpaneRules = new JScrollPane();
+		scrollpaneRules.setAlignmentY(JScrollPane.TOP_ALIGNMENT);
 		GridBagConstraints gbc_scrollpaneRules = new GridBagConstraints();
 		gbc_scrollpaneRules.insets = new Insets(0, 0, 5, 0);
 		gbc_scrollpaneRules.fill = GridBagConstraints.BOTH;
 		gbc_scrollpaneRules.gridx = 0;
-		gbc_scrollpaneRules.gridy = 4;
+		gbc_scrollpaneRules.gridy = 5;
 		gbc_scrollpaneRules.gridheight = GridBagConstraints.REMAINDER;
 		panelMenu.add(scrollpaneRules, gbc_scrollpaneRules);
 		
