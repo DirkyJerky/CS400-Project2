@@ -161,7 +161,7 @@ public class TweetStream {
 		buttonGotoN = new JButton("Goto N");
 		panelGotoN.add(buttonGotoN, BorderLayout.WEST);
 		
-		textGotoN = new JTextField();
+		textGotoN = new JFilteredTextField(JFilteredTextField.FilterType.NUMERICAL);
 		panelGotoN.add(textGotoN, BorderLayout.CENTER);
 		textGotoN.setColumns(3);
 		

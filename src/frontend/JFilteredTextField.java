@@ -5,6 +5,7 @@ import javax.swing.JTextField;
 @SuppressWarnings("serial")
 public class JFilteredTextField extends JTextField {
 	public enum FilterType {
+		NUMERICAL, // Number, positive or negative
 		NORMAL, // No restrictions
 		EMOJI, // One emoji
 		HASHTAG, // No all numbers;  (i18n) Letters, numbers, or underscore
