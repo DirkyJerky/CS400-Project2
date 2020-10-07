@@ -82,5 +82,16 @@ public class RulePanel extends JPanel {
 			comp.setEnabled(enabled);
 		}
 	}
+	
+	public void addRuleToBuilder(StringBuilder builder) {
+		if (this.filteredTextField.getText().length() == 0) {
+			return;
+		}
+
+		builder.append(((RuleType) this.comboboxSelectRuleType.getSelectedItem()).label);
+		builder.append(':');
+		builder.append(this.filteredTextField.getText());
+		builder.append(' ');
+	}
 
 }

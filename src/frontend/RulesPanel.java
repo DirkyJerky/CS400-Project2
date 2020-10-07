@@ -97,4 +97,19 @@ public class RulesPanel extends JPanel {
 			comp.setEnabled(enabled);
 		}
 	}
+	
+	// Create one single query object.
+	public String buildRule() throws IllegalStateException {
+		StringBuilder builder = new StringBuilder();
+		
+		for (RulePanel rule : this.rules) {
+			rule.addRuleToBuilder(builder);
+		}
+		
+		if (builder.length() > 512) {
+			throw new IllegalStateException("Rule too big");
+		}
+		
+		return builder.toString();
+	}
 }
