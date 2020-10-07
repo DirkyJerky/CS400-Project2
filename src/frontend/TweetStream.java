@@ -15,6 +15,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 import javax.swing.SwingConstants;
+import javax.swing.Timer;
+
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
@@ -31,7 +33,8 @@ public class TweetStream {
 	private JTextField textGotoN;
 	private JPlaceholderTextField textFilterText;
 	private RulesPanel panelRules;
-	private TweetViewerPanel scrollpaneTweetViewer;
+	private TweetViewerPanel panelTweetViewer;
+	private JButton btnClearTweets;
 	
 
 	/**
@@ -69,10 +72,10 @@ public class TweetStream {
 		panelMenu.setPreferredSize(new Dimension(250, 500));
 		frame.getContentPane().add(panelMenu, BorderLayout.WEST);
 		GridBagLayout gbl_panelMenu = new GridBagLayout();
-		gbl_panelMenu.columnWidths = new int[]{145, 0};
-		gbl_panelMenu.rowHeights = new int[]{26, 26, 26, 26, 26, 0, 0, 0};
-		gbl_panelMenu.columnWeights = new double[]{1.0, Double.MIN_VALUE};
-		gbl_panelMenu.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE, 0.0};
+		gbl_panelMenu.columnWidths = new int[]{145};
+		gbl_panelMenu.rowHeights = new int[]{26, 26, 26, 26, 26, 26, 0, 0, 0};
+		gbl_panelMenu.columnWeights = new double[]{1.0};
+		gbl_panelMenu.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
 		panelMenu.setLayout(gbl_panelMenu);
 		
 		labelTitle = new JLabel("Tweet Stream");
@@ -149,14 +152,74 @@ public class TweetStream {
 		gbc_buttonStreamToggle.gridy = 2;
 		panelMenu.add(buttonStreamToggle, gbc_buttonStreamToggle);
 		
+		int millisToEnable = 1000;
+		int millisToReset = 3000;
+		String startingText = "Clear All Tweets";
+		String confirmText = "Really clear tweets?";
+		btnClearTweets = new JButton(startingText);
+		btnClearTweets.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				if (event.getActionCommand() == startingText) {
+					btnClearTweets.setEnabled(false);
+					btnClearTweets.setText(confirmText);
+					
+					Timer timerToEnable = new Timer(millisToEnable, new ActionListener() {
+						@Override
+						public void actionPerformed(ActionEvent arg0) {
+							btnClearTweets.setEnabled(true);
+						}
+					});
+					timerToEnable.setRepeats(false);
+					timerToEnable.start();
+
+					Timer timerToReset = new Timer(millisToReset, new ActionListener() {
+						@Override
+						public void actionPerformed(ActionEvent arg0) {
+							btnClearTweets.setText(startingText);
+						}
+					});
+					timerToReset.setRepeats(false);
+					timerToReset.start();
+				} else if (event.getActionCommand() == confirmText) {
+					btnClearTweets.setEnabled(false);
+					btnClearTweets.setText(startingText);
+					
+					// Delay to allow the `timerToReset` above to catch up and not overlap any future timers
+					Timer timerToEnable = new Timer(millisToReset - millisToEnable, new ActionListener() {
+						@Override
+						public void actionPerformed(ActionEvent arg0) {
+							btnClearTweets.setEnabled(true);
+						}
+					});
+					timerToEnable.setRepeats(false);
+					timerToEnable.start();
+					
+					panelTweetViewer.clearTweets();
+				}
+			}
+		});
+		GridBagConstraints gbc_btnClearTweets = new GridBagConstraints();
+		gbc_btnClearTweets.fill = GridBagConstraints.BOTH;
+		gbc_btnClearTweets.insets = new Insets(0, 0, 5, 0);
+		gbc_btnClearTweets.gridx = 0;
+		gbc_btnClearTweets.gridy = 3;
+		panelMenu.add(btnClearTweets, gbc_btnClearTweets);
+		
 		JPanel panelGotoN = new JPanel();
 		GridBagConstraints gbc_panelGotoN = new GridBagConstraints();
 		gbc_panelGotoN.fill = GridBagConstraints.BOTH;
 		gbc_panelGotoN.insets = new Insets(0, 0, 5, 0);
 		gbc_panelGotoN.gridx = 0;
-		gbc_panelGotoN.gridy = 3;
+		gbc_panelGotoN.gridy = 4;
 		panelMenu.add(panelGotoN, gbc_panelGotoN);
 		panelGotoN.setLayout(new BorderLayout(0, 0));
+		
+		buttonGotoN = new JButton("Goto N");
+		panelGotoN.add(buttonGotoN, BorderLayout.WEST);
+		
+		textGotoN = new JFilteredTextField(JFilteredTextField.FilterType.NUMERICAL);
+		panelGotoN.add(textGotoN, BorderLayout.CENTER);
+		textGotoN.setColumns(3);
 		
 		buttonGotoN = new JButton("Goto N");
 		panelGotoN.add(buttonGotoN, BorderLayout.WEST);
@@ -171,7 +234,7 @@ public class TweetStream {
 		gbc_textFilterText.fill = GridBagConstraints.BOTH;
 		gbc_textFilterText.insets = new Insets(0, 0, 5, 0);
 		gbc_textFilterText.gridx = 0;
-		gbc_textFilterText.gridy = 4;
+		gbc_textFilterText.gridy = 5;
 		panelMenu.add(textFilterText, gbc_textFilterText);
 		textFilterText.setColumns(10);
 		
@@ -181,18 +244,21 @@ public class TweetStream {
 		gbc_scrollpaneRules.insets = new Insets(0, 0, 5, 0);
 		gbc_scrollpaneRules.fill = GridBagConstraints.BOTH;
 		gbc_scrollpaneRules.gridx = 0;
-		gbc_scrollpaneRules.gridy = 5;
+		gbc_scrollpaneRules.gridy = 6;
 		gbc_scrollpaneRules.gridheight = GridBagConstraints.REMAINDER;
 		panelMenu.add(scrollpaneRules, gbc_scrollpaneRules);
 		
 		panelRules = new RulesPanel();
 		scrollpaneRules.setViewportView(panelRules);
 		
-		scrollpaneTweetViewer = new TweetViewerPanel();
+		JScrollPane scrollpaneTweetViewer = new JScrollPane();
+		scrollpaneTweetViewer.setPreferredSize(new Dimension(1000, 500));
 		frame.getContentPane().add(scrollpaneTweetViewer, BorderLayout.CENTER);
 		
+		panelTweetViewer = new TweetViewerPanel();
+		scrollpaneTweetViewer.setViewportView(panelTweetViewer);
+		
 		frame.pack();
-		frame.setVisible(true);
 	}
 
 }
