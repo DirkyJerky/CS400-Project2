@@ -1,79 +1,94 @@
-package frontend;
+package frontend; 
 
-import javax.swing.JPanel;
-
-import frontend.JFilteredTextField.FilterType;
+import java.awt.Component;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JButton;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import javax.swing.JComboBox;
+import javax.swing.JPanel;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-// unchecked, rawtype suppression because my GUI builder doesn't like when I (properly) use the generic version of JComboBox
-@SuppressWarnings({ "serial", "unchecked", "rawtypes" }) 
+@SuppressWarnings("serial")
 public class RulePanel extends JPanel {
+	private static final int MAX_OPERATORS = 25;
 	
-	static final String CLOSE_CHARACTER = "×";
+	static final GridBagConstraints relativeGBC = new GridBagConstraints();
+	static {
+		relativeGBC.gridx = 0;
+		relativeGBC.gridy = GridBagConstraints.RELATIVE;
+		relativeGBC.anchor = GridBagConstraints.NORTH;
+		relativeGBC.weighty = 0.0;
+	}
 	
-	JButton buttonRemoveRule;
-	JComboBox comboboxSelectRuleType;
-	JFilteredTextField filteredTextField;
+	JButton buttonAddNewRule;
+	List<RuleOperatorPanel> operators;
+	
+	JPanel fillerComp;
+	GridBagConstraints gbc_fillerComp;
 	
 	public RulePanel() {
-		GridBagLayout gridBagLayout = new GridBagLayout();
-		gridBagLayout.columnWidths = new int[]{15, 85, 100, 0};
-		gridBagLayout.rowHeights = new int[]{20, 0};
-		gridBagLayout.columnWeights = new double[]{0.0, 0.0, 1.0, Double.MIN_VALUE};
-		gridBagLayout.rowWeights = new double[]{0.0, Double.MIN_VALUE};
-		setLayout(gridBagLayout);
+		super();
 		
-		this.buttonRemoveRule = new JButton();
-		buttonRemoveRule.addActionListener(new ActionListener() {
+		this.operators = new ArrayList<>(MAX_OPERATORS);
+		
+		fillerComp = new JPanel();
+		gbc_fillerComp = new GridBagConstraints();
+		gbc_fillerComp.gridx = 0;
+		gbc_fillerComp.gridy = GridBagConstraints.RELATIVE;
+		gbc_fillerComp.anchor = GridBagConstraints.NORTH;
+		gbc_fillerComp.weighty = 1.0;
+		gbc_fillerComp.fill = GridBagConstraints.BOTH;
+		
+		this.setLayout(new GridBagLayout());
+		
+		buttonAddNewRule = new JButton("Add new Operator");
+		buttonAddNewRule.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-				if (event.getActionCommand() == CLOSE_CHARACTER) {
-					Component parent = buttonRemoveRule.getParent().getParent();
-					if (parent instanceof RulesPanel) {
-						((RulesPanel) parent).removeRule((RulePanel) buttonRemoveRule.getParent()); 
-					}
+				if (event.getActionCommand() == "Add new Operator") {
+					addNewRule();
 				}
 			}
 		});
-		buttonRemoveRule.setText(CLOSE_CHARACTER);
-		buttonRemoveRule.setMargin(new Insets(0,0,0,0));
-		GridBagConstraints gbc_buttonRemoveRule = new GridBagConstraints();
-		gbc_buttonRemoveRule.insets = new Insets(0, 0, 0, 0);
-		gbc_buttonRemoveRule.anchor = GridBagConstraints.WEST;
-		gbc_buttonRemoveRule.gridx = 0;
-		gbc_buttonRemoveRule.gridy = 0;
-		this.add(buttonRemoveRule, gbc_buttonRemoveRule);
 		
-		this.comboboxSelectRuleType = new JComboBox(RuleType.values());
-		comboboxSelectRuleType.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent event) {
-				if (event.getActionCommand() == "comboBoxChanged" && filteredTextField != null) {
-					RuleType selectedType = (RuleType) comboboxSelectRuleType.getSelectedItem();
-					filteredTextField.updateFilterType(selectedType.filterType);
-				}
-			}
-		});
-		GridBagConstraints gbc_comboboxSelectRuleType = new GridBagConstraints();
-		gbc_comboboxSelectRuleType.fill = GridBagConstraints.HORIZONTAL;
-		gbc_comboboxSelectRuleType.gridx = 1;
-		gbc_comboboxSelectRuleType.gridy = 0;
-		add(comboboxSelectRuleType, gbc_comboboxSelectRuleType);
+		this.addNewRule();
+		this.resyncRules();
+	}
+	
+	public void addNewRule() {
+		RuleOperatorPanel newRule = new RuleOperatorPanel();
 		
-		filteredTextField = new JFilteredTextField(FilterType.NORMAL);
-		filteredTextField.setPreferredSize(new Dimension(100, 25));
-		GridBagConstraints gbc_filteredTextField = new GridBagConstraints();
-		gbc_filteredTextField.insets = new Insets(0, 5, 0, 0);
-		gbc_filteredTextField.gridx = 2;
-		gbc_filteredTextField.gridy = 0;
-		this.add(filteredTextField, gbc_filteredTextField);
+		this.operators.add(newRule);
+		
+		this.resyncRules();
+		
+		this.operators.get(this.operators.size() - 1).comboboxSelectRuleType.requestFocus();
+	}
+	
+	// Re-add all the rules objects in order
+	private void resyncRules() {
+		this.removeAll();
+		
+		for (RuleOperatorPanel rulePanel : this.operators) {
+			this.add(rulePanel, relativeGBC);
+		}
+		if (this.operators.size() < 25) {
+			this.add(this.buttonAddNewRule, relativeGBC);
+		}
+		
+		this.add(this.fillerComp, this.gbc_fillerComp);
+		
+		this.revalidate();
+		this.repaint();
+	}
+
+	public void removeRule(RuleOperatorPanel rulePanel) {
+		if (this.operators.remove(rulePanel)) {
+			this.resyncRules();
+			this.buttonAddNewRule.requestFocus();
+		}
 	}
 	
 	@Override
@@ -83,15 +98,18 @@ public class RulePanel extends JPanel {
 		}
 	}
 	
-	public void addRuleToBuilder(StringBuilder builder) {
-		if (this.filteredTextField.getText().length() == 0) {
-			return;
+	// Create one single query object.
+	public String buildRule() throws IllegalStateException {
+		StringBuilder builder = new StringBuilder();
+		
+		for (RuleOperatorPanel rule : this.operators) {
+			rule.addRuleToBuilder(builder);
 		}
-
-		builder.append(((RuleType) this.comboboxSelectRuleType.getSelectedItem()).label);
-		builder.append(':');
-		builder.append(this.filteredTextField.getText());
-		builder.append(' ');
+		
+		if (builder.length() > 512) {
+			throw new IllegalStateException("Rule too big");
+		}
+		
+		return builder.toString();
 	}
-
 }

@@ -32,7 +32,7 @@ public class TweetStream {
 	private JButton buttonGotoN;
 	private JTextField textGotoN;
 	private JPlaceholderTextField textFilterText;
-	private RulesPanel panelRules;
+	private RulePanel panelRules;
 	private TweetViewerPanel panelTweetViewer;
 	private JButton btnClearTweets;
 	
@@ -248,7 +248,7 @@ public class TweetStream {
 		gbc_scrollpaneRules.gridheight = GridBagConstraints.REMAINDER;
 		panelMenu.add(scrollpaneRules, gbc_scrollpaneRules);
 		
-		panelRules = new RulesPanel();
+		panelRules = new RulePanel();
 		scrollpaneRules.setViewportView(panelRules);
 		
 		JScrollPane scrollpaneTweetViewer = new JScrollPane();
