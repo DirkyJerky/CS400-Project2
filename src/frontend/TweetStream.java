@@ -95,7 +95,7 @@ public class TweetStream {
 		panelMenu.add(comboboxStreamSelector, gbc_comboboxStreamSelector);
 		
 		String startText = "Start Streaming";
-		String stopText = "Start Streaming";
+		String stopText = "Stop Streaming";
 		buttonStreamToggle = new JToggleButton(startText);
 		buttonStreamToggle.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
