@@ -1,5 +1,5 @@
 ## CS400 Team BD Project 2:  Twitter Stream
-Project Description TBD
+This application will enable the user to view a real time stream of tweets, according to the filter rule(s) they have set.  An use case for an application like this would be for users who dislike the bloated frontend that is Twitter’s main user pages, and want something more trimmed down.  Unlike Twitter’s website, this application wouldn’t give “related suggestions”, use analytics to track the user, nor display ads.
 
 ## Important links
 
