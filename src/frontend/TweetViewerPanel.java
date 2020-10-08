@@ -22,6 +22,7 @@ public class TweetViewerPanel extends JPanel {
 		relativeGBC.weighty = 0.0;
 	}
 	
+	// TODO:  Figure out how many tweets can be displayed in the current size of the panel
 	public TweetViewerPanel() {
 		super();
 		
@@ -65,5 +66,11 @@ public class TweetViewerPanel extends JPanel {
 		this.removeAll();
 		this.revalidate();
 		this.repaint();
+	}
+
+	// Scroll to the Nth tweet
+	public void gotoN(int n) {
+		System.err.println("Going to Nth tweet: n=" + n);
+		// TODO 
 	}
 }

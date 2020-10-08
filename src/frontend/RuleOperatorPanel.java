@@ -83,15 +83,18 @@ public class RuleOperatorPanel extends JPanel {
 		}
 	}
 	
-	public void addRuleToBuilder(StringBuilder builder) {
-		if (this.filteredTextField.getText().length() == 0) {
-			return;
+	public void addRuleToBuilder(StringBuilder builder) throws IllegalStateException {
+		if (this.isFieldValid()) {
+			builder.append(((RuleType) this.comboboxSelectRuleType.getSelectedItem()).label);
+			builder.append(':');
+			builder.append(this.filteredTextField.getText());
+			builder.append(' ');
+		} else {
+			throw new IllegalStateException("Empty operator");
 		}
-
-		builder.append(((RuleType) this.comboboxSelectRuleType.getSelectedItem()).label);
-		builder.append(':');
-		builder.append(this.filteredTextField.getText());
-		builder.append(' ');
 	}
 
+	public boolean isFieldValid() {
+		return this.filteredTextField.isFieldValid();
+	}
 }

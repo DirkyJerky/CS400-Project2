@@ -30,7 +30,7 @@ public class TweetStream {
 	private JComboBox comboboxStreamSelector;
 	private JToggleButton buttonStreamToggle;
 	private JButton buttonGotoN;
-	private JTextField textGotoN;
+	private JFilteredTextField textGotoN;
 	private JPlaceholderTextField textFilterText;
 	private RulePanel panelRules;
 	private TweetViewerPanel panelTweetViewer;
@@ -215,18 +215,27 @@ public class TweetStream {
 		panelGotoN.setLayout(new BorderLayout(0, 0));
 		
 		buttonGotoN = new JButton("Goto N");
+		buttonGotoN.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				if (event.getActionCommand() != "Goto N") {
+					return;
+				}
+				
+				if (textGotoN.isFieldValid()) {
+					try {
+						panelTweetViewer.gotoN(Integer.parseInt(textGotoN.getText()));
+					} catch (NumberFormatException e) {
+						System.err.println("textGotoN invalid int after isFieldValid() true (this shouldnt ever happen)");
+					}
+				} else {
+					textGotoN.validateField();
+				}
+			}
+		});
 		panelGotoN.add(buttonGotoN, BorderLayout.WEST);
 		
 		textGotoN = new JFilteredTextField(JFilteredTextField.FilterType.NUMERICAL);
 		panelGotoN.add(textGotoN, BorderLayout.CENTER);
-		textGotoN.setColumns(3);
-		
-		buttonGotoN = new JButton("Goto N");
-		panelGotoN.add(buttonGotoN, BorderLayout.WEST);
-		
-		textGotoN = new JFilteredTextField(JFilteredTextField.FilterType.NUMERICAL);
-		panelGotoN.add(textGotoN, BorderLayout.CENTER);
-		textGotoN.setColumns(3);
 		
 		textFilterText = new JPlaceholderTextField();
 		textFilterText.setPlaceholder("Search");
@@ -236,7 +245,6 @@ public class TweetStream {
 		gbc_textFilterText.gridx = 0;
 		gbc_textFilterText.gridy = 5;
 		panelMenu.add(textFilterText, gbc_textFilterText);
-		textFilterText.setColumns(10);
 		
 		JScrollPane scrollpaneRules = new JScrollPane();
 		scrollpaneRules.setAlignmentY(JScrollPane.TOP_ALIGNMENT);
