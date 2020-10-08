@@ -38,7 +38,7 @@ public class RuleOperatorPanel extends JPanel {
 				if (event.getActionCommand() == CLOSE_CHARACTER) {
 					Component parent = buttonRemoveRule.getParent().getParent();
 					if (parent instanceof RulePanel) {
-						((RulePanel) parent).removeRule((RuleOperatorPanel) buttonRemoveRule.getParent()); 
+						((RulePanel) parent).removeRuleOperator((RuleOperatorPanel) buttonRemoveRule.getParent()); 
 					}
 				}
 			}
@@ -52,11 +52,11 @@ public class RuleOperatorPanel extends JPanel {
 		gbc_buttonRemoveRule.gridy = 0;
 		this.add(buttonRemoveRule, gbc_buttonRemoveRule);
 		
-		this.comboboxSelectRuleType = new JComboBox(RuleType.values());
+		this.comboboxSelectRuleType = new JComboBox(OperatorType.values());
 		comboboxSelectRuleType.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				if (event.getActionCommand() == "comboBoxChanged" && filteredTextField != null) {
-					RuleType selectedType = (RuleType) comboboxSelectRuleType.getSelectedItem();
+					OperatorType selectedType = (OperatorType) comboboxSelectRuleType.getSelectedItem();
 					filteredTextField.updateFilterType(selectedType.filterType);
 				}
 			}
@@ -83,14 +83,14 @@ public class RuleOperatorPanel extends JPanel {
 		}
 	}
 	
-	public void addRuleToBuilder(StringBuilder builder) throws IllegalStateException {
+	public void addOperatorToBuilder(StringBuilder builder) throws IllegalStateException {
 		if (this.isFieldValid()) {
-			builder.append(((RuleType) this.comboboxSelectRuleType.getSelectedItem()).label);
+			builder.append(((OperatorType) this.comboboxSelectRuleType.getSelectedItem()).label);
 			builder.append(':');
 			builder.append(this.filteredTextField.getText());
 			builder.append(' ');
 		} else {
-			throw new IllegalStateException("Empty operator");
+			throw new IllegalStateException("Invalid operator");
 		}
 	}
 

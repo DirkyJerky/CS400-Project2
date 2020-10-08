@@ -94,11 +94,17 @@ public class TweetStream {
 		gbc_comboboxStreamSelector.gridy = 1;
 		panelMenu.add(comboboxStreamSelector, gbc_comboboxStreamSelector);
 		
-		buttonStreamToggle = new JToggleButton("Start Streaming");
+		String startText = "Start Streaming";
+		String stopText = "Start Streaming";
+		buttonStreamToggle = new JToggleButton(startText);
 		buttonStreamToggle.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-				if (event.getActionCommand() == "Start Streaming") {
-					if (true) { // TODO Test if rules are set, and the app is ready to go
+				if (event.getActionCommand() == startText) {
+					try {
+						// TODO Test if the app is ready to go
+						
+						String rule = panelRules.buildRule(); // Will throw exception if rule not valid/complete
+						
 						buttonStreamToggle.setEnabled(false);
 						buttonStreamToggle.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 						
@@ -110,7 +116,7 @@ public class TweetStream {
 								try {
 									// TODO:  Start streaming, then wait till we are running
 									
-									buttonStreamToggle.setText("Stop Streaming");
+									buttonStreamToggle.setText(stopText);
 									buttonStreamToggle.setEnabled(true);
 									buttonStreamToggle.setCursor(Cursor.getDefaultCursor());
 								} catch (Exception e) {
@@ -118,10 +124,23 @@ public class TweetStream {
 								}
 							}
 						});
-					} else {
+					} catch (IllegalStateException e) {
 						buttonStreamToggle.setSelected(false);
+						buttonStreamToggle.setEnabled(false);
+						buttonStreamToggle.setText(e.getMessage());
+						panelRules.focusInvalidOperator();
+						
+						Timer timerToReset = new Timer(3000, new ActionListener() {
+							@Override
+							public void actionPerformed(ActionEvent arg0) {
+								buttonStreamToggle.setText(startText);
+								buttonStreamToggle.setEnabled(true);
+							}
+						});
+						timerToReset.setRepeats(false);
+						timerToReset.start();
 					}
-				} else if (event.getActionCommand() == "Stop Streaming") {
+				} else if (event.getActionCommand() == stopText) {
 					buttonStreamToggle.setEnabled(false);
 					buttonStreamToggle.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
@@ -130,7 +149,7 @@ public class TweetStream {
 							try {
 								// TODO:  Wait till we have stopped streaming
 								
-								buttonStreamToggle.setText("Start Streaming");
+								buttonStreamToggle.setText(startText);
 								buttonStreamToggle.setEnabled(true);
 								buttonStreamToggle.setCursor(Cursor.getDefaultCursor());
 

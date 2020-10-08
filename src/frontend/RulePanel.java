@@ -23,7 +23,7 @@ public class RulePanel extends JPanel {
 		relativeGBC.weighty = 0.0;
 	}
 	
-	JButton buttonAddNewRule;
+	JButton buttonAddNewOperator;
 	List<RuleOperatorPanel> operators;
 	
 	JPanel fillerComp;
@@ -44,38 +44,38 @@ public class RulePanel extends JPanel {
 		
 		this.setLayout(new GridBagLayout());
 		
-		buttonAddNewRule = new JButton("Add new Operator");
-		buttonAddNewRule.addActionListener(new ActionListener() {
+		buttonAddNewOperator = new JButton("Add new Operator");
+		buttonAddNewOperator.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				if (event.getActionCommand() == "Add new Operator") {
-					addNewRule();
+					addNewOperator();
 				}
 			}
 		});
 		
-		this.addNewRule();
-		this.resyncRules();
+		this.addNewOperator();
+		this.resyncOperators();
 	}
 	
-	public void addNewRule() {
+	public void addNewOperator() {
 		RuleOperatorPanel newRule = new RuleOperatorPanel();
 		
 		this.operators.add(newRule);
 		
-		this.resyncRules();
+		this.resyncOperators();
 		
 		this.operators.get(this.operators.size() - 1).comboboxSelectRuleType.requestFocus();
 	}
 	
-	// Re-add all the rules objects in order
-	private void resyncRules() {
+	// Re-add all the operator objects in order
+	private void resyncOperators() {
 		this.removeAll();
 		
-		for (RuleOperatorPanel rulePanel : this.operators) {
-			this.add(rulePanel, relativeGBC);
+		for (RuleOperatorPanel operatorPanel : this.operators) {
+			this.add(operatorPanel, relativeGBC);
 		}
 		if (this.operators.size() < 25) {
-			this.add(this.buttonAddNewRule, relativeGBC);
+			this.add(this.buttonAddNewOperator, relativeGBC);
 		}
 		
 		this.add(this.fillerComp, this.gbc_fillerComp);
@@ -84,10 +84,10 @@ public class RulePanel extends JPanel {
 		this.repaint();
 	}
 
-	public void removeRule(RuleOperatorPanel rulePanel) {
-		if (this.operators.remove(rulePanel)) {
-			this.resyncRules();
-			this.buttonAddNewRule.requestFocus();
+	public void removeRuleOperator(RuleOperatorPanel operatorPanel) {
+		if (this.operators.remove(operatorPanel)) {
+			this.resyncOperators();
+			this.buttonAddNewOperator.requestFocus();
 		}
 	}
 	
@@ -102,8 +102,8 @@ public class RulePanel extends JPanel {
 	public String buildRule() throws IllegalStateException {
 		StringBuilder builder = new StringBuilder();
 		
-		for (RuleOperatorPanel rule : this.operators) {
-			rule.addRuleToBuilder(builder);
+		for (RuleOperatorPanel operator : this.operators) {
+			operator.addOperatorToBuilder(builder);
 		}
 		
 		if (builder.length() > 512) {
@@ -111,5 +111,16 @@ public class RulePanel extends JPanel {
 		}
 		
 		return builder.toString();
+	}
+	
+	// Highlight first invalid rule operator
+	public void focusInvalidOperator() {
+		for (RuleOperatorPanel operator : this.operators) {
+			if (!operator.filteredTextField.isFieldValid()) {
+				operator.filteredTextField.validateField();
+				operator.filteredTextField.requestFocus();
+				return;
+			}
+		}
 	}
 }

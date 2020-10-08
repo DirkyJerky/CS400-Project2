@@ -2,7 +2,7 @@ package frontend;
 
 import frontend.JFilteredTextField.FilterType;
 
-enum RuleType {
+enum OperatorType {
 	KEYWORD("Keyword", "keyword", FilterType.NORMAL),
 	HASHTAG("Hashtag (#)", "#", FilterType.HASHTAG),
 	MENTIONS("Mentions user", "@", FilterType.USERNAME),
@@ -13,7 +13,7 @@ enum RuleType {
 	final String name; // Name of the rule displayed to the user
 	final String label; // Name of the rule constructed in the query to twitter
 	final FilterType filterType; // The filter to be applied to the Text Field
-	RuleType(String name, String label, FilterType filterType) {
+	OperatorType(String name, String label, FilterType filterType) {
 		this.name = name;
 		this.label = label;
 		this.filterType = filterType;
