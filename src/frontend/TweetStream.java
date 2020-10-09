@@ -115,6 +115,8 @@ public class TweetStream {
 							public void run() {
 								try {
 									// TODO:  Start streaming, then wait till we are running
+									// TODO:  Do stuff with this rule
+									rule.length();
 									
 									buttonStreamToggle.setText(stopText);
 									buttonStreamToggle.setEnabled(true);
