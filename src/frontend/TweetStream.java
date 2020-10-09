@@ -12,7 +12,6 @@ import javax.swing.JLabel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JScrollPane;
-import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 import javax.swing.SwingConstants;
 import javax.swing.Timer;
@@ -27,6 +26,7 @@ public class TweetStream {
 
 	private JFrame frame;
 	private JLabel labelTitle;
+	@SuppressWarnings("rawtypes")
 	private JComboBox comboboxStreamSelector;
 	private JToggleButton buttonStreamToggle;
 	private JButton buttonGotoN;
