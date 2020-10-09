@@ -15,11 +15,10 @@ public class JStatusBar extends JLabel {
 	static int RESET_DELAY = 3000;
 	
 	Timer timerToReset;
-	Color defaultColor;
+	Color defaultColor; // 
 	public JStatusBar() {
-		this.setPreferredSize(new Dimension(0, 25));
-		this.defaultColor = this.getBackground();
 		this.setOpaque(true); // So background colors work
+		this.defaultColor = this.getBackground();
 		
 		timerToReset = new Timer(RESET_DELAY, (e) -> { setText(""); setBackground(defaultColor); });
 		timerToReset.setRepeats(false);

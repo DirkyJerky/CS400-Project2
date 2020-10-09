@@ -70,7 +70,6 @@ public class TweetStream {
 
 		
 		JPanel panelMenu = new JPanel();
-		panelMenu.setPreferredSize(new Dimension(250, 500));
 		frame.getContentPane().add(panelMenu, BorderLayout.WEST);
 		GridBagLayout gbl_panelMenu = new GridBagLayout();
 		gbl_panelMenu.columnWidths = new int[]{145};
@@ -265,7 +264,6 @@ public class TweetStream {
 		scrollpaneRules.setViewportView(panelRules);
 		
 		JPanel rightsidePanel = new JPanel();
-		rightsidePanel.setPreferredSize(new Dimension(1000, 500));
 		rightsidePanel.setLayout(new BorderLayout());
 		frame.getContentPane().add(rightsidePanel, BorderLayout.CENTER);
 		
@@ -277,7 +275,10 @@ public class TweetStream {
 		
 		panelTweetViewer = new TweetViewerPanel();
 		scrollpaneTweetViewer.setViewportView(panelTweetViewer);
-		
+
+		panelMenu.setPreferredSize(new Dimension(250, 500));
+		rightsidePanel.setPreferredSize(new Dimension(1000, 500));
+		labelStatus.setPreferredSize(new Dimension(0, 25));
 		frame.pack();
 	}
 
