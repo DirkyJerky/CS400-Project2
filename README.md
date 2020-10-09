@@ -5,3 +5,14 @@ This application will enable the user to view a real time stream of tweets, acco
 
 ### Proposal document
 https://docs.google.com/document/d/14oYCleAkYW8fs7aeO72wRIyEl4UkQ4GgTTGEgUXco_o
+
+### Twitter API docs (for knowing what our app will feature from)
+
+#### Filtered stream (limit 500k tweets/month)
+https://developer.twitter.com/en/docs/twitter-api/tweets/filtered-stream/introduction
+
+#### Sampled (%1) stream (no limit, but no server-side filters)
+https://developer.twitter.com/en/docs/twitter-api/tweets/sampled-stream/introduction
+
+#### Filtered stream: building a rule
+https://developer.twitter.com/en/docs/twitter-api/tweets/filtered-stream/integrate/build-a-rule
