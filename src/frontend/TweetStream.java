@@ -29,12 +29,13 @@ public class TweetStream {
 	@SuppressWarnings("rawtypes")
 	private JComboBox comboboxStreamSelector;
 	private JToggleButton buttonStreamToggle;
+	private JButton btnClearTweets;
 	private JButton buttonGotoN;
 	private JFilteredTextField textGotoN;
 	private JPlaceholderTextField textFilterText;
 	private RulePanel panelRules;
+	private JStatusBar labelStatus;
 	private TweetViewerPanel panelTweetViewer;
-	private JButton btnClearTweets;
 	
 
 	/**
@@ -127,16 +128,12 @@ public class TweetStream {
 					} catch (IllegalStateException e) {
 						buttonStreamToggle.setSelected(false);
 						buttonStreamToggle.setEnabled(false);
-						buttonStreamToggle.setText(e.getMessage());
+						
+						labelStatus.info(e.getMessage());
+						
 						panelRules.focusInvalidOperator();
 						
-						Timer timerToReset = new Timer(3000, new ActionListener() {
-							@Override
-							public void actionPerformed(ActionEvent arg0) {
-								buttonStreamToggle.setText(startText);
-								buttonStreamToggle.setEnabled(true);
-							}
-						});
+						Timer timerToReset = new Timer(3000, (ev) -> buttonStreamToggle.setEnabled(true));
 						timerToReset.setRepeats(false);
 						timerToReset.start();
 					}
@@ -182,21 +179,13 @@ public class TweetStream {
 					btnClearTweets.setEnabled(false);
 					btnClearTweets.setText(confirmText);
 					
-					Timer timerToEnable = new Timer(millisToEnable, new ActionListener() {
-						@Override
-						public void actionPerformed(ActionEvent arg0) {
-							btnClearTweets.setEnabled(true);
-						}
-					});
+					Timer timerToEnable = new Timer(millisToEnable, (ev) -> btnClearTweets.setEnabled(true));
+					
 					timerToEnable.setRepeats(false);
 					timerToEnable.start();
 
-					Timer timerToReset = new Timer(millisToReset, new ActionListener() {
-						@Override
-						public void actionPerformed(ActionEvent arg0) {
-							btnClearTweets.setText(startingText);
-						}
-					});
+					Timer timerToReset = new Timer(millisToReset, (ev) -> btnClearTweets.setText(startingText));
+
 					timerToReset.setRepeats(false);
 					timerToReset.start();
 				} else if (event.getActionCommand() == confirmText) {
@@ -204,12 +193,8 @@ public class TweetStream {
 					btnClearTweets.setText(startingText);
 					
 					// Delay to allow the `timerToReset` above to catch up and not overlap any future timers
-					Timer timerToEnable = new Timer(millisToReset - millisToEnable, new ActionListener() {
-						@Override
-						public void actionPerformed(ActionEvent arg0) {
-							btnClearTweets.setEnabled(true);
-						}
-					});
+					Timer timerToEnable = new Timer(millisToReset - millisToEnable, 
+							(ev) -> btnClearTweets.setEnabled(true));
 					timerToEnable.setRepeats(false);
 					timerToEnable.start();
 					
@@ -278,9 +263,16 @@ public class TweetStream {
 		panelRules = new RulePanel();
 		scrollpaneRules.setViewportView(panelRules);
 		
+		JPanel rightsidePanel = new JPanel();
+		rightsidePanel.setPreferredSize(new Dimension(1000, 500));
+		rightsidePanel.setLayout(new BorderLayout());
+		frame.getContentPane().add(rightsidePanel, BorderLayout.CENTER);
+		
+		labelStatus = new JStatusBar();
+		rightsidePanel.add(labelStatus, BorderLayout.NORTH);
+		
 		JScrollPane scrollpaneTweetViewer = new JScrollPane();
-		scrollpaneTweetViewer.setPreferredSize(new Dimension(1000, 500));
-		frame.getContentPane().add(scrollpaneTweetViewer, BorderLayout.CENTER);
+		rightsidePanel.add(scrollpaneTweetViewer, BorderLayout.CENTER);
 		
 		panelTweetViewer = new TweetViewerPanel();
 		scrollpaneTweetViewer.setViewportView(panelTweetViewer);

@@ -79,6 +79,8 @@ public class JFilteredTextField extends JTextField {
 		}
 	}
 	
+	static Color errorColor = new Color(255,200,225);
+	
 	FilterType filterType;
 	CustomFilter docFilter;
 
@@ -115,7 +117,7 @@ public class JFilteredTextField extends JTextField {
 		if (this.isFieldValid()) {
 			this.setBackground(Color.WHITE);
 		} else {
-			this.setBackground(new Color(255,200,225)); // Very light red
+			this.setBackground(errorColor); // Very light red
 		}
 	}
 	
