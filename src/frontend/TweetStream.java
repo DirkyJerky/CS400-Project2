@@ -233,6 +233,7 @@ public class TweetStream {
 					}
 				} else {
 					textGotoN.validateField();
+					textGotoN.requestFocus();
 				}
 			}
 		});
