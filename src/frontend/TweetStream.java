@@ -130,7 +130,7 @@ public class TweetStream {
 						buttonStreamToggle.setSelected(false);
 						buttonStreamToggle.setEnabled(false);
 						
-						labelStatus.info(e.getMessage());
+						labelStatus.error(e.getMessage());
 						
 						panelRules.focusInvalidOperator();
 						
