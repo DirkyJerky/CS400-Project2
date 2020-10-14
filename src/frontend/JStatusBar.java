@@ -11,7 +11,7 @@ public class JStatusBar extends JLabel {
 	static Color warningColor = new Color(225, 225, 150);
 	static Color errorColor = new Color(255,200,225);
 	
-	static int RESET_DELAY = 3000;
+	static int RESET_DELAY_PER_CHAR = 50;
 	
 	Timer timerToReset;
 	Color defaultColor; // 
@@ -19,25 +19,33 @@ public class JStatusBar extends JLabel {
 		this.setOpaque(true); // So background colors work
 		this.defaultColor = this.getBackground();
 		
-		timerToReset = new Timer(RESET_DELAY, (e) -> { setText(""); setBackground(defaultColor); });
+		timerToReset = new Timer(0, (e) -> { setText(""); setBackground(defaultColor); });
 		timerToReset.setRepeats(false);
 	}
 	
 	public void info(String text) {
 		this.setText(text);
 		this.setBackground(infoColor);
-		this.timerToReset.restart();
+
+		this.restartTimer(text.length());
 	}
 	
 	public void warn(String text) {
 		this.setText(text);
 		this.setBackground(warningColor);
-		this.timerToReset.restart();
+
+		this.restartTimer(text.length());
 	}
 	
 	public void error(String text) {
 		this.setText(text);
 		this.setBackground(errorColor);
+		
+		this.restartTimer(text.length());
+	}
+	
+	private void restartTimer(int numChars) {
+		this.timerToReset.setInitialDelay(numChars * RESET_DELAY_PER_CHAR);
 		this.timerToReset.restart();
 	}
 }
