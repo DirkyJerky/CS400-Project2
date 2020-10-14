@@ -88,6 +88,27 @@ public class TweetStream {
 		panelMenu.add(labelTitle, gbc_labelTitle);
 		
 		comboboxStreamSelector = new JComboBox(StreamSource.values());
+		comboboxStreamSelector.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				if (event.getActionCommand() == "comboBoxChanged") {
+					StreamSource source = (StreamSource) comboboxStreamSelector.getSelectedItem();
+					
+					switch (source) {
+					case FILTERED: {
+						panelRules.requestSetEnabled(0b0001, true);
+						break;
+					}
+					case SAMPLE: {
+						panelRules.requestSetEnabled(0b0001, false);
+						break;
+					}
+					default: {
+						System.err.println("No case statement for StreamSource = " + source + " in combobox logic");
+					}
+					}
+				}
+			}
+		});
 		GridBagConstraints gbc_comboboxStreamSelector = new GridBagConstraints();
 		gbc_comboboxStreamSelector.insets = new Insets(0, 0, 5, 0);
 		gbc_comboboxStreamSelector.gridx = 0;
@@ -103,13 +124,13 @@ public class TweetStream {
 					try {
 						// TODO Test if the app is ready to go
 						
-						String rule = panelRules.buildRule(); // Will throw exception if rule not valid/complete
+						String rule = (streamNeedsRule()) ? panelRules.buildRule() : ""; // Will throw exception if rule not valid/complete
 						
 						buttonStreamToggle.setEnabled(false);
 						buttonStreamToggle.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 						
 						comboboxStreamSelector.setEnabled(false);
-						panelRules.setEnabled(false);
+						panelRules.requestSetEnabled(0b0010, false);
 						
 						EventQueue.invokeLater(new Runnable() {
 							public void run() {
@@ -152,7 +173,7 @@ public class TweetStream {
 								buttonStreamToggle.setCursor(Cursor.getDefaultCursor());
 
 								comboboxStreamSelector.setEnabled(true);
-								panelRules.setEnabled(true);
+								panelRules.requestSetEnabled(0b0010, true);
 							} catch (Exception e) {
 								e.printStackTrace();
 							}
@@ -282,6 +303,10 @@ public class TweetStream {
 		rightsidePanel.setPreferredSize(new Dimension(1000, 500));
 		labelStatus.setPreferredSize(new Dimension(0, 25));
 		frame.pack();
+	}
+	
+	private boolean streamNeedsRule() {
+		return (StreamSource) this.comboboxStreamSelector.getSelectedItem() == StreamSource.FILTERED;
 	}
 
 }

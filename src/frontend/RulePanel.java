@@ -29,6 +29,9 @@ public class RulePanel extends JPanel {
 	JPanel fillerComp;
 	GridBagConstraints gbc_fillerComp;
 	
+	// Panel enabled only if this value is 0, see `requestEnabled` for details
+	int enabledFlag; 
+	
 	public RulePanel() {
 		super();
 		
@@ -41,6 +44,8 @@ public class RulePanel extends JPanel {
 		gbc_fillerComp.anchor = GridBagConstraints.NORTH;
 		gbc_fillerComp.weighty = 1.0;
 		gbc_fillerComp.fill = GridBagConstraints.BOTH;
+		
+		this.enabledFlag = 0;
 		
 		this.setLayout(new GridBagLayout());
 		
@@ -89,6 +94,28 @@ public class RulePanel extends JPanel {
 			this.resyncOperators();
 			this.buttonAddNewOperator.requestFocus();
 		}
+	}
+	
+	/**
+	 * Handles when multiple sources request for this panel to be disabled.
+	 * The panel will only be enabled if all sources request for it to be enabled
+	 * 
+	 * Current source ids (power of twos):
+	 * 1:  Stream selector combo box
+	 * 2:  Streaming status 
+	 * @param idFlag Bit flag, should be power of two and unique per source to ensure independence
+	 * @param enabled What the source is requesting the enabled status to be.
+	 */
+	public void requestSetEnabled(int idFlag, boolean enabled) {
+		if (enabled) {
+			// Clear bits represented by `idFlag`
+			this.enabledFlag &= ~idFlag;
+		} else {
+			// Set bits represented by `idFlag`
+			this.enabledFlag |= idFlag;
+		}
+		
+		this.setEnabled(this.enabledFlag == 0);
 	}
 	
 	@Override
