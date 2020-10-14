@@ -114,12 +114,20 @@ public class JFilteredTextField extends JTextField {
 	
 	// Color field red if its invalid
 	public void validateField() {
-		if (this.isFieldValid()) {
+		if (this.isFieldValid() || !this.isEnabled()) {
 			this.setBackground(Color.WHITE);
 		} else {
 			this.setBackground(errorColor); // Very light red
 		}
 	}
+	
+	@Override
+	public void setEnabled(boolean enabled) {
+		super.setEnabled(enabled);
+		
+		this.validateField();
+	}
+	
 	
 	// Based on https://stackoverflow.com/questions/11093326
 	class CustomFilter extends DocumentFilter {
@@ -167,10 +175,10 @@ public class JFilteredTextField extends JTextField {
 		public void remove(FilterBypass fb, int offset, int length) throws BadLocationException {
 			super.remove(fb, offset, length);
 			
-			Document doc = fb.getDocument();
-			StringBuilder sb = new StringBuilder();
-			sb.append(doc.getText(0, doc.getLength()));
-			sb.delete(offset, offset + length);
+//			Document doc = fb.getDocument();
+//			StringBuilder sb = new StringBuilder();
+//			sb.append(doc.getText(0, doc.getLength()));
+//			sb.delete(offset, offset + length);
 
 			validateField();
 		}
