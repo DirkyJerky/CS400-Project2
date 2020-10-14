@@ -83,15 +83,44 @@ public class RuleOperatorPanel extends JPanel {
 		}
 	}
 	
-	public void addOperatorToBuilder(StringBuilder builder) throws IllegalStateException {
-		if (this.isFieldValid()) {
-			builder.append(((OperatorType) this.comboboxSelectRuleType.getSelectedItem()).label);
-			builder.append(':');
-			builder.append(this.filteredTextField.getText());
-			builder.append(' ');
-		} else {
-			throw new IllegalStateException("Invalid operator");
+	public OperatorType getSelectedOperatorType() {
+		return (OperatorType) this.comboboxSelectRuleType.getSelectedItem();
+	}
+	
+	public String toRuleComponent() throws IllegalStateException {
+		if (!this.isFieldValid()) {
+			throw new IllegalStateException("Invalid operator value for " + this.getSelectedOperatorType().toString() + ": " + this.filteredTextField.getText());
 		}
+		
+		StringBuilder builder = new StringBuilder();
+		
+		OperatorType opType = this.getSelectedOperatorType();
+		
+		switch (opType) {
+		case KEYWORD: {
+			builder.append('"');
+			builder.append(this.filteredTextField.getText());
+			builder.append('"');
+			break;
+		}
+		
+		case FROM_USER:
+		case TO_USER:
+		case HASHTAG:
+		case MENTIONS: {
+			builder.append(opType.label);
+			builder.append(this.filteredTextField.getText());
+			break;
+		}
+		
+		default: {
+			System.err.println("OperatorType " + this.getSelectedOperatorType() + " unsupported in toString()");
+		}
+		}
+		
+		builder.append(' ');
+		
+		return builder.toString();
 	}
 
 	public boolean isFieldValid() {

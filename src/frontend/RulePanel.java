@@ -103,11 +103,11 @@ public class RulePanel extends JPanel {
 		StringBuilder builder = new StringBuilder();
 		
 		for (RuleOperatorPanel operator : this.operators) {
-			operator.addOperatorToBuilder(builder);
+			builder.append(operator.toRuleComponent());
 		}
 		
 		if (builder.length() > 512) {
-			throw new IllegalStateException("Rule too big");
+			throw new IllegalStateException("Rule too big:  Delete some operators");
 		}
 		
 		return builder.toString();
