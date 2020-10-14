@@ -2,8 +2,9 @@ package frontend;
 
 import frontend.JFilteredTextField.FilterType;
 
+// TODO:  Extend from/replace with what the other application creators provide.
 enum OperatorType {
-	KEYWORD("Keyword", "keyword", FilterType.NORMAL),
+	KEYWORD("Keyword", "", FilterType.NORMAL),
 	HASHTAG("Hashtag (#)", "#", FilterType.HASHTAG),
 	MENTIONS("Mentions user", "@", FilterType.USERNAME),
 	FROM_USER("By user", "from:", FilterType.USERNAME),

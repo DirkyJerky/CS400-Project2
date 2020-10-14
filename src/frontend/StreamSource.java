@@ -1,5 +1,6 @@
 package frontend;
 
+//TODO:  Extend from/replace with what the other application creators provide.
 public enum StreamSource {
 	FILTERED("Filtered stream"),
 	SAMPLE("1% Sample stream");
