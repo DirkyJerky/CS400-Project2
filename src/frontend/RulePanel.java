@@ -9,6 +9,9 @@ import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.awt.event.ActionEvent;
 
 @SuppressWarnings("serial")
@@ -79,7 +82,7 @@ public class RulePanel extends JPanel {
 		for (RuleOperatorPanel operatorPanel : this.operators) {
 			this.add(operatorPanel, relativeGBC);
 		}
-		if (this.operators.size() < 25) {
+		if (this.operators.size() < MAX_OPERATORS) {
 			this.add(this.buttonAddNewOperator, relativeGBC);
 		}
 		
@@ -149,5 +152,36 @@ public class RulePanel extends JPanel {
 				return;
 			}
 		}
+	}
+	
+	
+	// State info, 2*num_operators + 1 lines
+	// Line 1 = Number of RuleOperatorPanels
+	// for each 2 lines: RuleOperatorPanel
+	
+	public void writeState(PrintWriter writer) {
+		writer.println(this.operators.size());
+		
+		for (RuleOperatorPanel opPanel : this.operators) {
+			opPanel.writeState(writer);
+		}
+	}
+	
+	public void readState(BufferedReader reader) throws IOException {
+		int numOpPanels = 0;
+		try {
+			numOpPanels = Integer.parseInt(reader.readLine());
+		} catch (NumberFormatException e) {
+			throw new IOException("Invalid int number of RuleOperatorPanels in RulePanel.readState", e);
+		}
+		
+		this.operators.clear();
+		
+		for (int i = 0; i < numOpPanels; i += 1) {
+			this.operators.add(RuleOperatorPanel.readState(reader));
+		}
+		
+		this.resyncOperators();
+		this.requestSetEnabled(0, true); // Reset enabled status correctly
 	}
 }

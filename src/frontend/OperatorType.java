@@ -1,5 +1,9 @@
 package frontend;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.PrintWriter;
+
 import frontend.JFilteredTextField.FilterType;
 
 // TODO:  Extend from/replace with what the other application creators provide.
@@ -23,5 +27,25 @@ enum OperatorType {
 	@Override
 	public String toString() {
 		return this.name;
+	}
+	
+	
+	// State info, 1 line
+	// this.name
+	
+	public void writeState(PrintWriter writer) {
+		writer.println(this.name);
+	}
+	
+	public static OperatorType readState(BufferedReader reader) throws IOException {
+		String state = reader.readLine();
+		
+		for (OperatorType opType : OperatorType.values()) {
+			if (opType.name.contentEquals(state)) {
+				return opType;
+			}
+		}
+		
+		throw new IOException("Invalid OperatorType in readState(): " + state);
 	}
 }

@@ -20,7 +20,20 @@ import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class TweetStream {
 
@@ -37,7 +50,8 @@ public class TweetStream {
 	private JStatusBar labelStatus;
 	private TweetViewerPanel panelTweetViewer;
 	
-
+	static String STATE_FILE = "appstate.txt";
+	
 	/**
 	 * Launch the application.
 	 */
@@ -67,7 +81,11 @@ public class TweetStream {
 		frame.setBounds(100, 100, 450, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(new BorderLayout(0, 0));
-
+		frame.addWindowListener(new WindowAdapter() {
+		    public void windowClosing(WindowEvent e) {
+		        saveStateToFile();
+		    }
+		});
 		
 		JPanel panelMenu = new JPanel();
 		frame.getContentPane().add(panelMenu, BorderLayout.WEST);
@@ -86,6 +104,16 @@ public class TweetStream {
 		gbc_labelTitle.gridx = 0;
 		gbc_labelTitle.gridy = 0;
 		panelMenu.add(labelTitle, gbc_labelTitle);
+//		labelTitle.addMouseListener(new MouseAdapter() {
+//			@Override
+//			public void mouseClicked(MouseEvent event) {
+//				if (event.getButton() == 1) { // Left click
+//					saveStateToFile();
+//				} else if (event.getButton() == 3) { // Right click
+//					readStateFromFile();
+//				}
+//			}
+//		});
 		
 		comboboxStreamSelector = new JComboBox(StreamSource.values());
 		comboboxStreamSelector.addActionListener(new ActionListener() {
@@ -303,10 +331,79 @@ public class TweetStream {
 		rightsidePanel.setPreferredSize(new Dimension(1000, 500));
 		labelStatus.setPreferredSize(new Dimension(0, 25));
 		frame.pack();
+		
+		this.readStateFromFile();
 	}
 	
 	private boolean streamNeedsRule() {
 		return (StreamSource) this.comboboxStreamSelector.getSelectedItem() == StreamSource.FILTERED;
 	}
-
+	
+	
+	void saveStateToFile() {
+		try {
+//			labelStatus.info("Saving state to file...");
+			
+			PrintWriter writer =
+					new PrintWriter(
+					new BufferedWriter(
+					new OutputStreamWriter(
+					new FileOutputStream(STATE_FILE))));
+			
+			this.writeState(writer);
+			
+			writer.flush();
+			writer.close();
+			
+//			labelStatus.info("Saved state to file");
+		} catch (FileNotFoundException e) {
+			labelStatus.error(e.getMessage());
+			e.printStackTrace();
+		}
+	}
+	
+	void readStateFromFile() {
+		if (!Files.isReadable(Paths.get(STATE_FILE))) {
+			return;
+		}
+		
+		try {
+			labelStatus.info("Reading state from file...");
+			
+			BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(STATE_FILE)));
+			
+			this.readState(reader);
+			
+			reader.close();
+			
+			labelStatus.info("Read state from file");
+		} catch (FileNotFoundException e) {
+			labelStatus.error(e.getMessage());
+			e.printStackTrace();
+		} catch (IOException e) {
+			labelStatus.error(e.getMessage());
+			e.printStackTrace();
+		}
+	}
+	
+	
+	// State info:
+	// Stream selector selection,
+	// Goto N text field content,
+	// Search text field content,
+	// RulePanel
+	
+	public void writeState(PrintWriter writer) {
+		((StreamSource) this.comboboxStreamSelector.getSelectedItem()).writeState(writer);
+		writer.println(textGotoN.getText());
+		writer.println(textFilterText.getText());
+		this.panelRules.writeState(writer);
+	}
+	
+	public void readState(BufferedReader reader) throws IOException {
+		this.comboboxStreamSelector.setSelectedItem(StreamSource.readState(reader));
+		this.textGotoN.setText(reader.readLine());
+		this.textFilterText.setText(reader.readLine());
+		this.panelRules.readState(reader);
+	}
 }

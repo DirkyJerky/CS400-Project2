@@ -1,6 +1,9 @@
 # No sharing RBTree Implementation
 src/RBTree/*.java
 
+# Frontend persistance
+appstate.txt
+
 # Eclipse files
 .classpath
 .project

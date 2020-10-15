@@ -12,6 +12,9 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import javax.swing.JComboBox;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.awt.event.ActionEvent;
 
 // unchecked, rawtype suppression because my GUI builder doesn't like when I (properly) use the generic version of JComboBox
@@ -125,5 +128,26 @@ public class RuleOperatorPanel extends JPanel {
 
 	public boolean isFieldValid() {
 		return this.filteredTextField.isFieldValid();
+	}
+
+	
+	// State info, 2 lines:
+	// operator type,  text field content
+	
+	public void writeState(PrintWriter writer) {
+		this.getSelectedOperatorType().writeState(writer);
+		writer.println(this.filteredTextField.getText());
+	}
+	
+	public static RuleOperatorPanel readState(BufferedReader reader) throws IOException {
+		OperatorType opType = OperatorType.readState(reader);
+		String textFieldContent = reader.readLine();
+		
+		RuleOperatorPanel newPanel = new RuleOperatorPanel();
+		
+		newPanel.comboboxSelectRuleType.setSelectedItem(opType);
+		newPanel.filteredTextField.setText(textFieldContent);
+		
+		return newPanel;
 	}
 }
