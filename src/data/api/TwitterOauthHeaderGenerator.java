@@ -1,4 +1,4 @@
-package data;
+package data.api;
 
 import javax.crypto.Mac;
 import javax.crypto.SecretKey;

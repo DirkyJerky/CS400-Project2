@@ -1,4 +1,4 @@
-package data;
+package data.resources;
 
 public class Tweet {
 

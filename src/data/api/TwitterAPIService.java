@@ -1,6 +1,10 @@
-package data;
+package data.api;
 
 import com.google.gson.*;
+import data.TwitterDataAccessInterface;
+import data.resources.Tweet;
+import data.resources.TweetFilterRule;
+import data.resources.TwitterUser;
 import okhttp3.Response;
 
 import java.io.IOException;
@@ -488,6 +492,8 @@ public class TwitterAPIService implements TwitterDataAccessInterface {
             return null;
         }
     }
+
+    // TODO: Implement this
 
     private Set<Tweet> parseTweetFromResponse(Response response){
         // TODO: Implement

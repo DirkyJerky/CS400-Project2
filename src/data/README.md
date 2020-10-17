@@ -7,7 +7,16 @@ to post rules (filters), stream tweets from their rules set, look up users, etc.
 - Data Wrangler is also responsible for code that runs on app initiation and populates the initial RB Tree with tweets 
 based on active filters
 
-- All .jar dependencies in /dependencies/ need to be added to the classpath for the API client to work properly.
+- All .jar dependencies in /jar_dependencies/ need to be added to the classpath for the API client to work properly.
+
+### Usage
+- The core interface for data's code is: TwitterDataAccessInterface.java
+- This interface is implemented by /api/TwitterAPIService.java
+
+This interface can be implemented with
+`TwitterDataAccessInterface interface = new TwitterAPIService();`
+
+- /resources/ contains the Java Objects used in for the API Client: Tweet.java, TwitterUser.java, TweetFilteringRule.java
 
 ### Endpoints and References
 

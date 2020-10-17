@@ -1,9 +1,9 @@
 package frontend;
 
-import data.TweetFilterRule;
-import data.TwitterAPIService;
+import data.resources.TweetFilterRule;
+import data.api.TwitterAPIService;
 import data.TwitterDataAccessInterface;
-import data.TwitterUser;
+import data.resources.TwitterUser;
 
 import java.util.Set;
 

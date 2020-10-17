@@ -1,4 +1,4 @@
-package data;
+package data.api;
 
 import java.util.Objects;
 

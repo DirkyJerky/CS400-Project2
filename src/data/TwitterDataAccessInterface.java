@@ -1,5 +1,8 @@
 package data;
 
+import data.resources.TweetFilterRule;
+import data.resources.TwitterUser;
+
 import java.util.Set;
 
 public interface TwitterDataAccessInterface {
