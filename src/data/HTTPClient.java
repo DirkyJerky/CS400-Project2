@@ -6,27 +6,55 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+import java.io.IOException;
+
 public class HTTPClient {
 
     private OkHttpClient client;
     public static final MediaType JSON
-            = MediaType.get("application/json; charset=utf-8");
+            = MediaType.parse("application/json; charset=utf-8");
 
     public HTTPClient() {
         client = new OkHttpClient();
     }
 
-    public void sendPostRequest(TwitterRequestObject requestObject) {
+    public Response sendOneTimePostRequest(TwitterRequestObject requestObject) {
         RequestBody body = RequestBody.create(requestObject.getJsonBody(), JSON);
         Request request = new Request.Builder()
-                                .header("Authorization", "Bearer " + "AAAAAAAAAAAAAAAAAAAAAJgiIQEAAAAASKsySmauclKIif2r1nVEQzley5w%3DYCjJQMOgBwX3qoLummZYAuOAVx32ehjuK5DBZoM4ntGa84DtPV")
+                                .header("Authorization", requestObject.getAuthorizationValue())
+                                .header("Content-Type", "application/json")
                                 .url(requestObject.getUrl())
                                 .method("POST", body)
                                 .build();
+        try {
+            Response response = client.newCall(request).execute();
+            System.out.println("Response Code: " + response.code());
+            return response;
+        } catch (IOException e) {
+            System.out.println("An IOException has occurred.");
+            e.printStackTrace();
+            return null;
+        }
+
     }
 
-    public void sendOneTimeGetRequest(TwitterRequestObject requestObject) {
-
+    public Response sendOneTimeGetRequest(TwitterRequestObject requestObject) {
+        // RequestBody body = RequestBody.create(requestObject.getJsonBody(), JSON);
+        Request request = new Request.Builder()
+                .header("Authorization", requestObject.getAuthorizationValue())
+                .header("Content-Type", "application/json")
+                .url(requestObject.getUrl())
+                .method("GET", null)
+                .build();
+        try {
+            Response response = client.newCall(request).execute();
+            System.out.println("Response Code: " + response.code());
+            return response;
+        } catch (IOException e) {
+            System.out.println("An IOException has occurred.");
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public void sendStreamedGetRequest(String urlString, String requestBody) {
