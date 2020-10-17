@@ -1,4 +1,4 @@
-## Data Wrangling Files 
+## Data Wrangler Files 
 
 ### Responsibilities
 - The primary responsibility of the Data Wrangler role on this project is to write a Twitter API Client to allow the user
