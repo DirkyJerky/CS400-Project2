@@ -13,7 +13,7 @@ based on active filters
 - The core interface for data's code is: TwitterDataAccessInterface.java
 - This interface is implemented by /api/TwitterAPIService.java
 
-- This interface can be implemented with
+- This interface can be implemented with:
 `TwitterDataAccessInterface interface = new TwitterAPIService();`
 
 - /resources/ contains the Java Objects used in for the API Client: Tweet.java, TwitterUser.java, TweetFilteringRule.java
