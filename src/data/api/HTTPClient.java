@@ -56,10 +56,4 @@ public class HTTPClient {
             return null;
         }
     }
-
-    public Response sendStreamedGetRequest(TwitterRequestObject requestObject) {
-        return null;
-    }
-
-
 }

@@ -58,7 +58,7 @@ public class Main {
         // Test a call to the getTweetFilteringRules endpoint:
         // GET /2/tweets/search/stream/rules
         System.out.println("Testing a call to GET /2/tweets/search/stream/rules");
-        Set<TweetFilterRule> ruleSet = apiAccessInterface.getTweetFiltersRules();
+        Set<TweetFilterRule> ruleSet = apiAccessInterface.getTweetFilteringRules();
         ruleSet.forEach(i -> {
             System.out.println();
             System.out.println("Existing Rule:");
@@ -103,7 +103,7 @@ public class Main {
         // Test a call to the getTweetFilteringRules endpoint after deleting 3 rules in previous calls, should be 2 left:
         // GET /2/tweets/search/stream/rules
         System.out.println("Testing a call to GET /2/tweets/search/stream/rules");
-        Set<TweetFilterRule> ruleSetAfterDelete = apiAccessInterface.getTweetFiltersRules();
+        Set<TweetFilterRule> ruleSetAfterDelete = apiAccessInterface.getTweetFilteringRules();
         ruleSetAfterDelete.forEach(i -> {
             System.out.println();
             System.out.println("Existing Rule:");

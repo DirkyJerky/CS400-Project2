@@ -19,7 +19,7 @@ public interface TwitterDataAccessInterface {
 
     boolean deleteMultipleTweetFilteringRulesByRuleIds(String[] ruleIds);
 
-    Set<TweetFilterRule> getTweetFiltersRules();
+    Set<TweetFilterRule> getTweetFilteringRules();
 
     TwitterUser getUserByUsername(String username);
 

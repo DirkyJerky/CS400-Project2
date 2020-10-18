@@ -131,7 +131,7 @@ public class TwitterAPIService implements TwitterDataAccessInterface {
      * @return
      */
     @Override
-    public Set<TweetFilterRule> getTweetFiltersRules() {
+    public Set<TweetFilterRule> getTweetFilteringRules() {
         TwitterRequestObject request = buildGetTweetStreamRulesRequest();
         Response response = httpClient.sendOneTimeGetRequest(request);
         if (response == null) {
@@ -192,7 +192,7 @@ public class TwitterAPIService implements TwitterDataAccessInterface {
 
         ArrayList<String> track = new ArrayList<String>();
 
-        Set<TweetFilterRule> activeRuleSet = getTweetFiltersRules();
+        Set<TweetFilterRule> activeRuleSet = getTweetFilteringRules();
         activeRuleSet.forEach(i -> {
             System.out.println("Adding rule to filter set");
             System.out.println(i.getValue());
