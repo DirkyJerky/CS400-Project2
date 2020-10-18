@@ -12,10 +12,7 @@ import twitter4j.*;
 import twitter4j.conf.ConfigurationBuilder;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class TwitterAPIService implements TwitterDataAccessInterface {
 
@@ -33,7 +30,6 @@ public class TwitterAPIService implements TwitterDataAccessInterface {
     private static SessionController sessionController
             = new SessionController();
 
-    private int tweetCounter = 0;
     private TwitterStream ts;
 
     public TwitterAPIService() {
@@ -193,11 +189,45 @@ public class TwitterAPIService implements TwitterDataAccessInterface {
     @Override
     public void getFilteredStream() {
         TwitterStream twitterStream = getTwitterStreamInstance();
-        twitterStream.addListener(getStatusListener());
 
+        ArrayList<String> track = new ArrayList<String>();
+
+        Set<TweetFilterRule> activeRuleSet = getTweetFiltersRules();
+        activeRuleSet.forEach(i -> {
+            System.out.println("Adding rule to filter set");
+            System.out.println(i.getValue());
+            track.add(i.getValue());
+        });
+
+        String[] trackArray = track.toArray(new String[track.size()]);
+        FilterQuery filterQuery = new FilterQuery();
+        filterQuery.track(trackArray);
+
+        twitterStream.addListener(getFilteredStatusListener());
+
+        twitterStream.filter(filterQuery);
         // Need to create the filter query here
         // Does this automatically filter on the posted rules?
 
+//        ArrayList<Long> follow = new ArrayList<Long>();
+//        ArrayList<String> track = new ArrayList<String>();
+//        for (String arg : args) {
+//            if (isNumericalArgument(arg)) {
+//                for (String id : arg.split(",")) {
+//                    follow.add(Long.parseLong(id));
+//                }
+//            } else {
+//                track.addAll(Arrays.asList(arg.split(",")));
+//            }
+//        }
+//        long[] followArray = new long[follow.size()];
+//        for (int i = 0; i < follow.size(); i++) {
+//            followArray[i] = follow.get(i);
+//        }
+//        String[] trackArray = track.toArray(new String[track.size()]);
+//
+//        // filter() method internally creates a thread which manipulates TwitterStream and calls these adequate listener methods continuously.
+//        twitterStream.filter(new FilterQuery(0, followArray, trackArray));
     }
 
     /**
@@ -206,7 +236,7 @@ public class TwitterAPIService implements TwitterDataAccessInterface {
     @Override
     public void getSampleStream() {
         TwitterStream twitterStream = getTwitterStreamInstance();
-        twitterStream.addListener(getStatusListener());
+        twitterStream.addListener(getSampleStatusListener());
         twitterStream.sample();
     }
 
@@ -449,22 +479,6 @@ public class TwitterAPIService implements TwitterDataAccessInterface {
         return requestObject;
     }
 
-    // TODO: Implement these
-
-    private TwitterRequestObject buildGetTweetStreamRequest() {
-
-        // Build the query here... should you call the API and determine the active filters?
-        // How does the filter work with previously set rules
-
-//        TwitterRequestObject requestObject = new TwitterRequestObject();
-//        String queryParams = "?tweet.fields=id,text,author_id,created_at,conversation_id,entities&user.fields=id,name,username";
-//        String urlString = BASE_URL + "/2/tweets/search/stream" + queryParams;
-//        requestObject.setUrl(urlString);
-//        requestObject.setJsonBody("{}");
-//        requestObject.setAuthorizationValue("Bearer " + bearerToken);
-        return null;
-    }
-
     // Methods below are used to parse incoming responses
 
     /**
@@ -558,7 +572,7 @@ public class TwitterAPIService implements TwitterDataAccessInterface {
      * Working
      * @return
      */
-    private StatusListener getStatusListener() {
+    private StatusListener getSampleStatusListener() {
         StatusListener newStatusListener = new StatusListener() {
 
             int counter = 0;
@@ -572,6 +586,58 @@ public class TwitterAPIService implements TwitterDataAccessInterface {
                 if (counter >= 1000) { // Gets N tweets before shutting down
                     System.out.println("Printing Final Tree:");
                     RedBlackTree<Tweet> copiedSampleStream = sessionController.getCopyOfOnePercentTweetTree();
+                    System.out.println(copiedSampleStream.toString());
+                    ts.shutdown();
+                }
+            }
+
+            @Override
+            public void onDeletionNotice(StatusDeletionNotice statusDeletionNotice) {
+                System.out.println("Got a status deletion notice id:" + statusDeletionNotice.getStatusId());
+            }
+
+            @Override
+            public void onTrackLimitationNotice(int numberOfLimitedStatuses) {
+                System.out.println("Got track limitation notice:" + numberOfLimitedStatuses);
+            }
+
+            @Override
+            public void onScrubGeo(long userId, long upToStatusId) {
+                System.out.println("Got scrub_geo event userId:" + userId + " upToStatusId:" + upToStatusId);
+            }
+
+            @Override
+            public void onStallWarning(StallWarning warning) {
+                System.out.println("Got stall warning:" + warning);
+            }
+
+            @Override
+            public void onException(Exception ex) {
+                ex.printStackTrace();
+            }
+        };
+
+        return newStatusListener;
+    }
+
+    /**
+     * Working
+     * @return
+     */
+    private StatusListener getFilteredStatusListener() {
+        StatusListener newStatusListener = new StatusListener() {
+
+            int counter = 5;
+
+            @Override
+            public void onStatus(Status status) {
+                System.out.println("@" + status.getUser().getScreenName() + " - " + status.getText());
+                Tweet newTweet = parseTweetFromResponse(status);
+                sessionController.addTweetToFilteredTree(newTweet);
+                counter++;
+                if (counter >= 5) { // Gets N tweets before shutting down
+                    System.out.println("Printing Final Filtered Tree:");
+                    RedBlackTree<Tweet> copiedSampleStream = sessionController.getCopyOfFilteredTweetTree();
                     System.out.println(copiedSampleStream.toString());
                     ts.shutdown();
                 }

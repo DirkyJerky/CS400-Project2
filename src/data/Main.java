@@ -1,8 +1,7 @@
-package frontend;
+package data;
 
-import data.resources.TweetFilterRule;
 import data.api.TwitterAPIService;
-import data.TwitterDataAccessInterface;
+import data.resources.TweetFilterRule;
 import data.resources.TwitterUser;
 
 import java.util.Set;
@@ -51,7 +50,7 @@ public class Main {
                 " rule2 = 'rabbit has:images'" +
                 " rule3 = 'elephant has:images'" +
                 " rule4 = 'goat has:images'");
-        String[] requestArray = {"dog has:images", "rabbit has:images", "elephant has:images", "goat has images"};
+        String[] requestArray = {"dog has:images", "rabbit has:images", "elephant has:images", "goat has:images"};
         boolean responseStatus2 = apiAccessInterface.postMultipleTweetFilteringRules(requestArray);
         System.out.println("Response Received: " + responseStatus2);
         System.out.println();
@@ -73,7 +72,7 @@ public class Main {
         // POST /2/tweets/search/stream/rules - delete functionality
         // Using value of 'cat has:images' here
         System.out.println("Testing a call to POST /2/tweets/search/strem/rules to delete a rule by value");
-        boolean responseStatus3 = apiAccessInterface.deleteTweetFilteringRuleByValue("cat has:images");
+        boolean responseStatus3 = apiAccessInterface.deleteTweetFilteringRuleByValue("goat has:images");
         System.out.println();
 
 
@@ -81,7 +80,7 @@ public class Main {
         // POST /2/tweets/search/stream/rules - delete functionality
         // Using id of '1317285188687323138' here (rabbit has:images)
         System.out.println("Testing a call to POST /2/tweets/search/strem/rules to delete multiple rules by value");
-        String[] ruleValuesToDelete = {"dog has:images", "elephant has:images"};
+        String[] ruleValuesToDelete = {"rabbit has:images", "elephant has:images", "dog has:images", "goat has images"};
         boolean responseStatus4 = apiAccessInterface.deleteMultipleTweetFilteringRulesByValue(ruleValuesToDelete);
         System.out.println();
 
@@ -114,8 +113,11 @@ public class Main {
             System.out.println();
         });
 
-        System.out.println("Testing a call to the sample stream.");
-        apiAccessInterface.getSampleStream();
+        //System.out.println("Testing a call to the sample stream.");
+        //apiAccessInterface.getSampleStream();
+
+        //System.out.println("Testing a call to the filtered stream.");
+        apiAccessInterface.getFilteredStream();
 
     }
 }
