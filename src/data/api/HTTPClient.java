@@ -57,8 +57,8 @@ public class HTTPClient {
         }
     }
 
-    public void sendStreamedGetRequest(String urlString, String requestBody) {
-
+    public Response sendStreamedGetRequest(TwitterRequestObject requestObject) {
+        return null;
     }
 
 

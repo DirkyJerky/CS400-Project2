@@ -27,5 +27,5 @@ public interface TwitterDataAccessInterface {
 
     void getFilteredStream();
 
-    void getSampleFilteredStream();
+    void getSampleStream();
 }

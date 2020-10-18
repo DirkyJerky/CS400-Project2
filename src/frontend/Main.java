@@ -114,5 +114,8 @@ public class Main {
             System.out.println();
         });
 
+        System.out.println("Testing a call to the sample stream.");
+        apiAccessInterface.getSampleStream();
+
     }
 }

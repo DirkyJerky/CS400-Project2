@@ -1,11 +1,15 @@
 package data.api;
 
+import RBTree.RedBlackTree;
 import com.google.gson.*;
 import data.TwitterDataAccessInterface;
+import data.controllers.SessionController;
 import data.resources.Tweet;
 import data.resources.TweetFilterRule;
 import data.resources.TwitterUser;
 import okhttp3.Response;
+import twitter4j.*;
+import twitter4j.conf.ConfigurationBuilder;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -26,6 +30,11 @@ public class TwitterAPIService implements TwitterDataAccessInterface {
             = new HTTPClient();
     private static TwitterOauthHeaderGenerator twitterOauthHeaderGenerator
             = new TwitterOauthHeaderGenerator(consumerKey, consumerSecret, token, tokenSecret);
+    private static SessionController sessionController
+            = new SessionController();
+
+    private int tweetCounter = 0;
+    private TwitterStream ts;
 
     public TwitterAPIService() {
     }
@@ -183,12 +192,22 @@ public class TwitterAPIService implements TwitterDataAccessInterface {
 
     @Override
     public void getFilteredStream() {
+        TwitterStream twitterStream = getTwitterStreamInstance();
+        twitterStream.addListener(getStatusListener());
+
+        // Need to create the filter query here
+        // Does this automatically filter on the posted rules?
 
     }
 
+    /**
+     * Working
+     */
     @Override
-    public void getSampleFilteredStream() {
-
+    public void getSampleStream() {
+        TwitterStream twitterStream = getTwitterStreamInstance();
+        twitterStream.addListener(getStatusListener());
+        twitterStream.sample();
     }
 
     // Method below are used to build outgoing requests
@@ -433,12 +452,16 @@ public class TwitterAPIService implements TwitterDataAccessInterface {
     // TODO: Implement these
 
     private TwitterRequestObject buildGetTweetStreamRequest() {
-        // TODO: Implement
-        return null;
-    }
 
-    private TwitterRequestObject buildGetTweetSampleStreamRequest() {
-        // TODO: Implement
+        // Build the query here... should you call the API and determine the active filters?
+        // How does the filter work with previously set rules
+
+//        TwitterRequestObject requestObject = new TwitterRequestObject();
+//        String queryParams = "?tweet.fields=id,text,author_id,created_at,conversation_id,entities&user.fields=id,name,username";
+//        String urlString = BASE_URL + "/2/tweets/search/stream" + queryParams;
+//        requestObject.setUrl(urlString);
+//        requestObject.setJsonBody("{}");
+//        requestObject.setAuthorizationValue("Bearer " + bearerToken);
         return null;
     }
 
@@ -493,30 +516,94 @@ public class TwitterAPIService implements TwitterDataAccessInterface {
         }
     }
 
-    // TODO: Implement this
+    /**
+     * Working
+     * @param status
+     * @return
+     */
+    private Tweet parseTweetFromResponse(Status status) {
+        User tweetUser = status.getUser();
 
-    private Set<Tweet> parseTweetFromResponse(Response response){
-        // TODO: Implement
-        return null;
+        TwitterUser newUser = new TwitterUser();
+        newUser.setId(String.valueOf(tweetUser.getId()));
+        newUser.setName(tweetUser.getName());
+        newUser.setUsername(tweetUser.getScreenName());
+
+        Tweet newTweet = new Tweet();
+        newTweet.setAuthor_id(newUser.getId());
+        newTweet.setId(String.valueOf(status.getId()));
+        newTweet.setText(status.getText());
+        newTweet.setCreated_at(status.getCreatedAt().toString());
+        newTweet.setUser(newUser);
+
+        return newTweet;
     }
 
-
+    /**
+     * Working
+     * @return
+     */
+    private TwitterStream getTwitterStreamInstance() {
+        ConfigurationBuilder cb = new ConfigurationBuilder();
+        cb.setDebugEnabled(true)
+                .setOAuthConsumerKey(consumerKey)
+                .setOAuthConsumerSecret(consumerSecret)
+                .setOAuthAccessToken(token)
+                .setOAuthAccessTokenSecret(tokenSecret);
+        ts = new TwitterStreamFactory(cb.build()).getInstance();
+        return ts;
+    }
 
     /**
-     * Filtered Stream:
-     * GET /2/tweets/search/stream
-     * GET /2/tweets/search/stream/rules
-     * POST /2/tweets/search/stream/rules
+     * Working
+     * @return
      */
+    private StatusListener getStatusListener() {
+        StatusListener newStatusListener = new StatusListener() {
 
-    /**
-     * Sample Stream:
-     * GET /2/tweets/search/sample/stream
-     */
+            int counter = 0;
 
+            @Override
+            public void onStatus(Status status) {
+                System.out.println("@" + status.getUser().getScreenName() + " - " + status.getText());
+                Tweet newTweet = parseTweetFromResponse(status);
+                sessionController.addTweetToSampleTree(newTweet);
+                counter++;
+                if (counter >= 1000) { // Gets N tweets before shutting down
+                    System.out.println("Printing Final Tree:");
+                    RedBlackTree<Tweet> copiedSampleStream = sessionController.getCopyOfOnePercentTweetTree();
+                    System.out.println(copiedSampleStream.toString());
+                    ts.shutdown();
+                }
+            }
 
-    /**
-     * Users:
-     * GET /2/users/by/username/:username (lookup by single username)
-     */
+            @Override
+            public void onDeletionNotice(StatusDeletionNotice statusDeletionNotice) {
+                System.out.println("Got a status deletion notice id:" + statusDeletionNotice.getStatusId());
+            }
+
+            @Override
+            public void onTrackLimitationNotice(int numberOfLimitedStatuses) {
+                System.out.println("Got track limitation notice:" + numberOfLimitedStatuses);
+            }
+
+            @Override
+            public void onScrubGeo(long userId, long upToStatusId) {
+                System.out.println("Got scrub_geo event userId:" + userId + " upToStatusId:" + upToStatusId);
+            }
+
+            @Override
+            public void onStallWarning(StallWarning warning) {
+                System.out.println("Got stall warning:" + warning);
+            }
+
+            @Override
+            public void onException(Exception ex) {
+                ex.printStackTrace();
+            }
+        };
+
+        return newStatusListener;
+    }
+
 }
