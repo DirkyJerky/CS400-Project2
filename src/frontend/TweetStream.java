@@ -37,7 +37,7 @@ import java.awt.event.WindowEvent;
 
 public class TweetStream {
 
-	private JFrame frame;
+	JFrame frame;
 	private JLabel labelTitle;
 	@SuppressWarnings("rawtypes")
 	private JComboBox comboboxStreamSelector;
@@ -51,22 +51,6 @@ public class TweetStream {
 	private TweetViewerPanel panelTweetViewer;
 	
 	static String STATE_FILE = "appstate.txt";
-	
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					TweetStream window = new TweetStream();
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	public TweetStream() {
 		initialize();
