@@ -1,3 +1,16 @@
+// --== CS400 File Header Information ==--
+// Source: https://stackoverflow.com/questions/3756257/absolute-minimum-code-to-get-a-valid-oauth-signature-populated-in-java-or-groovy
+// Found By: Jacob Lorenz
+// Email: jlorenz2@wisc.edu
+// Team: BD
+// Role: Data Wrangler
+// TA: Brianna Cochran
+// Lecturer: Gary Dahl
+// Notes to Grader: Please note that this class was not written by any member of our team.
+//                  I (Jacob Lorenz) secured approval from Briannas (TA) to use this file in
+//                  my project. This file is used to create the OAuth 1.0 Authorization header
+//                  needed in order to access Twitter's RESTful APIs.
+
 package data.api;
 
 import javax.crypto.Mac;
@@ -12,7 +25,7 @@ import java.util.stream.Collectors;
 
 /**
  * Class to generate Oauth 1.0a header for Twitter
- *
+ * Source: https://stackoverflow.com/questions/3756257/absolute-minimum-code-to-get-a-valid-oauth-signature-populated-in-java-or-groovy
  */
 public class TwitterOauthHeaderGenerator {
 

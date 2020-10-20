@@ -1,21 +1,44 @@
+// --== CS400 File Header Information ==--
+// Name: Jacob Lorenz
+// Email: jlorenz2@wisc.edu
+// Team: BD
+// Role: Data Wrangler
+// TA: Brianna Cochran
+// Lecturer: Gary Dahl
+// Notes to Grader: Written by Jacob Lorenz
+//                  A custom implementation of the TwitterDataAccessInterface to implement the API Accessor methods
+//                  available within the app. This class abstracts the HTTP functionality involved when dealing with the
+//                  data to allow the frontend / backend make simple function calls.
+
 package data.api;
 
 import RBTree.RedBlackTree;
-import com.google.gson.*;
 import data.TwitterDataAccessInterface;
 import data.controllers.SessionController;
 import data.resources.Tweet;
 import data.resources.TweetFilterRule;
 import data.resources.TwitterUser;
+
 import okhttp3.Response;
+
+import com.google.gson.*;
+
 import twitter4j.*;
 import twitter4j.conf.ConfigurationBuilder;
 
 import java.io.IOException;
 import java.util.*;
 
+/**
+ * Implements TwitterDataAccessInterface
+ * Uses okhttp and twitter4j to abstract the Twitter API calls into descriptive functions for simple
+ * and intuitive access for the frontend and backend in whatever data needs they have.
+ */
 public class TwitterAPIService implements TwitterDataAccessInterface {
 
+    /**
+     * Private Variables used for HTTP routing and authorization
+     */
     private final String BASE_URL = "https://api.twitter.com";
     private static final String consumerKey = "LtG6jpBInaEduKkkQmQCw5sso";
     private static final String consumerSecret = "ntqqLEGyBJsGbMi6kdybC7lUBlJKsZ1RuRa8lFbMXLCHEh7VWD";
@@ -23,6 +46,9 @@ public class TwitterAPIService implements TwitterDataAccessInterface {
     private static final String tokenSecret = "jnRSAHWwdLmQm0HVW9OOfxD2O8aVJL14r5Uv0l8d2OuB7";
     private static final String bearerToken = "AAAAAAAAAAAAAAAAAAAAAJgiIQEAAAAASKsySmauclKIif2r1nVEQzley5w%3DYCjJQMOgBwX3qoLummZYAuOAVx32ehjuK5DBZoM4ntGa84DtPV";
 
+    /**
+     * Private class instance references used to manage the core of the app's data
+     */
     private static HTTPClient httpClient
             = new HTTPClient();
     private static TwitterOauthHeaderGenerator twitterOauthHeaderGenerator
@@ -30,6 +56,9 @@ public class TwitterAPIService implements TwitterDataAccessInterface {
     private static SessionController sessionController
             = new SessionController();
 
+    /**
+     * Used when calling the sample stream or filtered stream endpoint
+     */
     private TwitterStream ts;
 
     public TwitterAPIService() {
@@ -201,7 +230,8 @@ public class TwitterAPIService implements TwitterDataAccessInterface {
 
         String[] trackArray = track.toArray(new String[track.size()]);
         FilterQuery filterQuery = new FilterQuery();
-        filterQuery.track(trackArray);
+        filterQuery.track(trackArray[0]);
+        filterQuery.track("cat OR dog");
 
         twitterStream.addListener(getFilteredStatusListener());
 
@@ -243,7 +273,8 @@ public class TwitterAPIService implements TwitterDataAccessInterface {
     // Method below are used to build outgoing requests
 
     /**
-     * Working
+     * Creates a new TwitterRequestObject and populates it with the correct information for getUserByUsername and
+     * getUsersByUsernames functions
      * @param username
      * @return
      */
@@ -627,7 +658,7 @@ public class TwitterAPIService implements TwitterDataAccessInterface {
     private StatusListener getFilteredStatusListener() {
         StatusListener newStatusListener = new StatusListener() {
 
-            int counter = 5;
+            int counter = 0;
 
             @Override
             public void onStatus(Status status) {
