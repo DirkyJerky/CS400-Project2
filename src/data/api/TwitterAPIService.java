@@ -61,14 +61,19 @@ public class TwitterAPIService implements TwitterDataAccessInterface {
      */
     private TwitterStream ts;
 
+    /**
+     * Default Constructor
+     */
     public TwitterAPIService() {
     }
 
 
     /**
+     * Wraps the POST /2/tweets/search/stream/rules for a single rule
      * Working
-     * @param rule
-     * @return
+     *
+     * @param rule the rule you would like to add to the filtering set
+     * @return true if the rule was successfully posted to the rules set, false otherwise
      */
     @Override
     public boolean postTweetFilteringRule(String rule) {
@@ -81,9 +86,11 @@ public class TwitterAPIService implements TwitterDataAccessInterface {
     }
 
     /**
+     * Wraps the POST /2/tweets/search/stream/rules for multiple rules
      * Working
-     * @param rules
-     * @return
+     *
+     * @param rules the rules you would like to add to the filtering set
+     * @return true if the rules were successfully posted to the rules set, false otherwise
      */
     @Override
     public boolean postMultipleTweetFilteringRules(String[] rules) {
@@ -96,9 +103,11 @@ public class TwitterAPIService implements TwitterDataAccessInterface {
     }
 
     /**
+     * Wraps the POST /2/tweets/search/stream/rules to delete a single rule from the filtering set by its value
      * Working
-     * @param ruleValue
-     * @return
+     *
+     * @param ruleValue the value of the rule to be deleted
+     * @return true if the rule was successfully deleted from the rules set, false otherwise
      */
     @Override
     public boolean deleteTweetFilteringRuleByValue(String ruleValue) {
@@ -111,9 +120,11 @@ public class TwitterAPIService implements TwitterDataAccessInterface {
     }
 
     /**
+     * Wraps the POST /2/tweets/search/stream/rules to delete multiple rules from the filtering set by their values
      * Working
-     * @param ruleValues
-     * @return
+     *
+     * @param ruleValues the values of the rules to be deleted
+     * @return true if the rules were successfully deleted from the rules set, false otherwise
      */
     @Override
     public boolean deleteMultipleTweetFilteringRulesByValue(String[] ruleValues) {
@@ -126,9 +137,11 @@ public class TwitterAPIService implements TwitterDataAccessInterface {
     }
 
     /**
+     * Wraps the POST /2/tweets/search/stream/rules to delete a single rule from the filtering set by its id
      * Working
-     * @param ruleId
-     * @return
+     *
+     * @param ruleId the id of the rule to be deleted
+     * @return true if the rule was successfully deleted from the rules set, false otherwise
      */
     @Override
     public boolean deleteTweetFilteringRuleByRuleId(String ruleId) {
@@ -141,9 +154,11 @@ public class TwitterAPIService implements TwitterDataAccessInterface {
     }
 
     /**
+     * Wraps the POST /2/tweets/search/stream/rules to delete multiple rules from the filtering set by their ids
      * Working
-     * @param ruleIds
-     * @return
+     *
+     * @param ruleIds the ids of the rules to be deleted
+     * @return true if the rules were successfully deleted from the rules set, false otherwise
      */
     @Override
     public boolean deleteMultipleTweetFilteringRulesByRuleIds(String[] ruleIds) {
@@ -156,8 +171,10 @@ public class TwitterAPIService implements TwitterDataAccessInterface {
     }
 
     /**
+     * Wraps the GET /2/tweets/search/stream/rules to lookup all rules that are previous active and filtering in the filtering stream
      * Working
-     * @return
+     *
+     * @return a Set<TweetFilteringRule> containing all active rules
      */
     @Override
     public Set<TweetFilterRule> getTweetFilteringRules() {
@@ -171,9 +188,11 @@ public class TwitterAPIService implements TwitterDataAccessInterface {
     }
 
     /**
+     * Wraps the GET /2/users/by/username/:username to lookup a Twitter User by their username
      * Working
-     * @param username
-     * @return
+     *
+     * @param username the username of the user to lookup
+     * @return a TwitterUser representation of the user found matching the username
      */
     @Override
     public TwitterUser getUserByUsername(String username) {
@@ -187,9 +206,11 @@ public class TwitterAPIService implements TwitterDataAccessInterface {
     }
 
     /**
+     * Wraps the GET /2/users/by/username/:username to lookup multiple Twitter Users by their usernames
      * Working
-     * @param usernames
-     * @return
+     *
+     * @param usernames the usernames of the users to lookup
+     * @return a Set<TwitterUser> containing all of the users found matching the usernames
      */
     @Override
     public Set<TwitterUser> getUsersByUsernames(String[] usernames) {
@@ -212,9 +233,10 @@ public class TwitterAPIService implements TwitterDataAccessInterface {
         return retrievedUsersSet;
     }
 
-
-    // TODO: Implement These
-
+    /**
+     * Wraps Twitter APIs and uses twitter4j to stream Tweets based on previously set filters
+     * Working
+     */
     @Override
     public void getFilteredStream() {
         TwitterStream twitterStream = getTwitterStreamInstance();
@@ -236,31 +258,10 @@ public class TwitterAPIService implements TwitterDataAccessInterface {
         twitterStream.addListener(getFilteredStatusListener());
 
         twitterStream.filter(filterQuery);
-        // Need to create the filter query here
-        // Does this automatically filter on the posted rules?
-
-//        ArrayList<Long> follow = new ArrayList<Long>();
-//        ArrayList<String> track = new ArrayList<String>();
-//        for (String arg : args) {
-//            if (isNumericalArgument(arg)) {
-//                for (String id : arg.split(",")) {
-//                    follow.add(Long.parseLong(id));
-//                }
-//            } else {
-//                track.addAll(Arrays.asList(arg.split(",")));
-//            }
-//        }
-//        long[] followArray = new long[follow.size()];
-//        for (int i = 0; i < follow.size(); i++) {
-//            followArray[i] = follow.get(i);
-//        }
-//        String[] trackArray = track.toArray(new String[track.size()]);
-//
-//        // filter() method internally creates a thread which manipulates TwitterStream and calls these adequate listener methods continuously.
-//        twitterStream.filter(new FilterQuery(0, followArray, trackArray));
     }
 
     /**
+     * Wraps Twitter APIs and uses twitter4j to sample a one percent random sample of all Tweets, unfiltered
      * Working
      */
     @Override
@@ -270,13 +271,15 @@ public class TwitterAPIService implements TwitterDataAccessInterface {
         twitterStream.sample();
     }
 
-    // Method below are used to build outgoing requests
+
 
     /**
      * Creates a new TwitterRequestObject and populates it with the correct information for getUserByUsername and
-     * getUsersByUsernames functions
-     * @param username
-     * @return
+     * getUsersByUsernames methods
+     * Working
+     *
+     * @param username the username of the TwitterUser to create a request for
+     * @return TwitterRequestObject
      */
     private TwitterRequestObject buildGetUserDetailsFromUsernameRequest(String username) {
         TwitterRequestObject requestObject = new TwitterRequestObject();
@@ -289,8 +292,10 @@ public class TwitterAPIService implements TwitterDataAccessInterface {
     }
 
     /**
+     * Builds the TwitterRequestObject for use in the getTweetFilteringRules wrapper method
      * Working
-     * @return
+     *
+     * @return a TwitterRequestObject for use in the future API call
      */
     private TwitterRequestObject buildGetTweetStreamRulesRequest() {
         TwitterRequestObject requestObject = new TwitterRequestObject();
@@ -303,9 +308,11 @@ public class TwitterAPIService implements TwitterDataAccessInterface {
     }
 
     /**
+     * Builds the TwitterRequestObject for use in the postTweetFilteringRule wrapper method
      * Working
-     * @param rule
-     * @return
+     *
+     * @param rule the rule of the current request to format in the body
+     * @return a TwitterRequestObject for use in the future API call
      */
     private TwitterRequestObject buildPostTweetStreamRuleRequest(String rule) {
         TwitterRequestObject requestObject = new TwitterRequestObject();
@@ -334,9 +341,11 @@ public class TwitterAPIService implements TwitterDataAccessInterface {
     }
 
     /**
+     * Builds the TwitterRequestObject for use in the postMultipleTweetFilteringRules wrapper method
      * Working
-     * @param filters
-     * @return
+     *
+     * @param filters the rules of the current request to format in the body
+     * @return a TwitterRequestObject for use in the future API call
      */
     private TwitterRequestObject buildPostMultipleTweetStreamRulesRequest(String[] filters) {
         TwitterRequestObject requestObject = new TwitterRequestObject();
@@ -377,9 +386,11 @@ public class TwitterAPIService implements TwitterDataAccessInterface {
     }
 
     /**
+     * Builds the TwitterRequestObject for use in the deleteTweetFilteringRuleByValue wrapper method
      * Working
-     * @param ruleValue
-     * @return
+     *
+     * @param ruleValue the value of the rule of the current request to be deleted
+     * @return a TwitterRequestObject for use in the future API call
      */
     private TwitterRequestObject buildDeleteTweetStreamRuleRequest(String ruleValue) {
         TwitterRequestObject requestObject = new TwitterRequestObject();
@@ -406,9 +417,11 @@ public class TwitterAPIService implements TwitterDataAccessInterface {
     }
 
     /**
+     * Builds the TwitterRequestObject for use in the deleteMultipleTweetFilteringRulesByValue wrapper method
      * Working
-     * @param ruleValues
-     * @return
+     *
+     * @param ruleValues the values of the rules of the current request to be deleted
+     * @return a TwitterRequestObject for use in the future API call
      */
     private TwitterRequestObject buildDeleteMultipleTweetStreamRulesRequest(String[] ruleValues) {
         TwitterRequestObject requestObject = new TwitterRequestObject();
@@ -444,9 +457,11 @@ public class TwitterAPIService implements TwitterDataAccessInterface {
     }
 
     /**
+     * Builds the TwitterRequestObject for use in the deleteTweetFilteringRuleById wrapper method
      * Working
-     * @param ruleId
-     * @return
+     *
+     * @param ruleId the id of the rule of the current request to be deleted
+     * @return a TwitterRequestObject for use in the future API call
      */
     private TwitterRequestObject buildDeleteTweetStreamRuleByIdRequest(String ruleId) {
         TwitterRequestObject requestObject = new TwitterRequestObject();
@@ -473,9 +488,11 @@ public class TwitterAPIService implements TwitterDataAccessInterface {
     }
 
     /**
+     * Builds the TwitterRequestObject for use in the deleteMultipleTweetFilteringRulesByRuleIds wrapper method
      * Working
-     * @param ruleIds
-     * @return
+     *
+     * @param ruleIds the ids of the rules of the current request to be deleted
+     * @return a TwitterRequestObject for use in the future API call
      */
     private TwitterRequestObject buildDeleteMultipleTweetStreamRulesByIdRequest(String[] ruleIds) {
         TwitterRequestObject requestObject = new TwitterRequestObject();
@@ -510,12 +527,12 @@ public class TwitterAPIService implements TwitterDataAccessInterface {
         return requestObject;
     }
 
-    // Methods below are used to parse incoming responses
-
     /**
+     * Uses gson to deserialize a response from Twitter into a TwitterUser object containing id, name, and username
      * Working
-     * @param response
-     * @return
+     *
+     * @param response the HTTP response to parse
+     * @return a TwitterUser with information from the response
      */
     private TwitterUser parseUserFromResponse(Response response) {
         Gson gson = new GsonBuilder().create();
@@ -533,9 +550,11 @@ public class TwitterAPIService implements TwitterDataAccessInterface {
     }
 
     /**
+     * Uses gson to deserialize a response from Twitter into a Set of TweetFilterRule objects
      * Working
-     * @param response
-     * @return
+     *
+     * @param response the HTTP response to parse
+     * @return a Set<TweetFilterRule> with information from the response
      */
     private Set<TweetFilterRule> parseRulesFromResponse(Response response) {
         Gson gson = new GsonBuilder().create();
@@ -562,9 +581,11 @@ public class TwitterAPIService implements TwitterDataAccessInterface {
     }
 
     /**
+     * Uses gson to deserialize a response from Twitter into a Tweet object
      * Working
-     * @param status
-     * @return
+     *
+     * @param status the HTTP response from the Streaming endpoints to parst
+     * @return a Tweet with information from the response / Status
      */
     private Tweet parseTweetFromResponse(Status status) {
         User tweetUser = status.getUser();
@@ -585,8 +606,10 @@ public class TwitterAPIService implements TwitterDataAccessInterface {
     }
 
     /**
+     * Returns an instance of a TwitterStream to be used for one of the Streaming endpoints
      * Working
-     * @return
+     *
+     * @return a TwitterStream to use in filtering endpoints
      */
     private TwitterStream getTwitterStreamInstance() {
         ConfigurationBuilder cb = new ConfigurationBuilder();
@@ -600,8 +623,10 @@ public class TwitterAPIService implements TwitterDataAccessInterface {
     }
 
     /**
+     * Creates a StatusListener to handle incoming Status updates in the persistent Sample Streaming Endpoint
      * Working
-     * @return
+     *
+     * @return a StatusListener that will handle the cases of incoming Streamed Tweets
      */
     private StatusListener getSampleStatusListener() {
         StatusListener newStatusListener = new StatusListener() {
@@ -652,8 +677,10 @@ public class TwitterAPIService implements TwitterDataAccessInterface {
     }
 
     /**
+     * Creates a StatusListener to handle incoming Status updates in the persistent Filtered Streaming Endpoint
      * Working
-     * @return
+     *
+     * @return a StatusListener that will handle the cases of incoming Streamed Tweets
      */
     private StatusListener getFilteredStatusListener() {
         StatusListener newStatusListener = new StatusListener() {
