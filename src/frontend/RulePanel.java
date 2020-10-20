@@ -1,3 +1,10 @@
+// --== CS400 File Header Information ==--
+// Name: Geoff Yoerger
+// Email: giyoerger@wisc.edu
+// Team: BD
+// Role: Frontend
+// TA: Bri Cochran
+// Lecturer: Florian Heimerl
 package frontend; 
 
 import java.awt.Component;
