@@ -245,15 +245,17 @@ public class TwitterAPIService implements TwitterDataAccessInterface {
 
         Set<TweetFilterRule> activeRuleSet = getTweetFilteringRules();
         activeRuleSet.forEach(i -> {
-            System.out.println("Adding rule to filter set");
-            System.out.println(i.getValue());
             track.add(i.getValue());
         });
 
         String[] trackArray = track.toArray(new String[track.size()]);
         FilterQuery filterQuery = new FilterQuery();
-        filterQuery.track(trackArray);
+        String ruleQuery = trackArray[0];
+        for (int i = 1; i < trackArray.length; i++) {
+            ruleQuery += " OR " + trackArray[i];
+        }
 
+        filterQuery.track(ruleQuery);
         twitterStream.addListener(getFilteredStatusListener());
         twitterStream.filter(filterQuery);
     }
