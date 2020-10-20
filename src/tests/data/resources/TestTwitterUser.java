@@ -10,6 +10,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestTwitterUser {
 	
+	/*
+	 * Tests the TwitterUser object's getters, setters, and toString()
+	 */
 	@Test
 	void testTwitterUserObject() {
 		TwitterUser tu1 = new TwitterUser();
@@ -36,7 +39,10 @@ public class TestTwitterUser {
 	
 	}	
 	
-	
+	/*
+	 * Tests the TwitterUser object's equals() method so they are only 
+	 * equal when all data is the same
+	 */
 	@Test
 	void testTweetEquals() {
 		TwitterUser tu1 = new TwitterUser();

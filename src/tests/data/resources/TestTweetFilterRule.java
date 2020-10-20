@@ -1,3 +1,11 @@
+// --== CS400 File Header Information ==--
+// Name: Max Roth
+// Email: mroth8@wisc.edu
+// Team: BD
+// Role: Testing
+// TA: Bri Cochran
+// Lecturer: Florian Heimerl
+
 package test.data.resources;
 
 import data.resources.TweetFilterRule;
@@ -7,6 +15,9 @@ import org.junit.jupiter.api.BeforeEach;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestTweetFilterRule {
+	/*
+	 * Tests the TwitterUser objects getters, setters, and toString()
+	 */
 	@Test
 	void testTwitterUserObject() {
 		TweetFilterRule tfr1 = new TweetFilterRule();
@@ -33,7 +44,10 @@ public class TestTweetFilterRule {
 	
 	}	
 	
-	
+	/*
+	 * Tests the TweetFilterRule object's equals() method so it only returns
+	 * true when the two objects have the exact same data
+	 */
 	@Test
 	void testTweetEquals() {
 		TweetFilterRule tfr1 = new TweetFilterRule();

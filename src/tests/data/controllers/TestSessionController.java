@@ -1,3 +1,11 @@
+// --== CS400 File Header Information ==--
+// Name: Max Roth
+// Email: mroth8@wisc.edu
+// Team: BD
+// Role: Testing
+// TA: Bri Cochran
+// Lecturer: Florian Heimerl
+
 package test.data.controllers;
 
 import data.resources.Tweet;
@@ -9,6 +17,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestSessionController {
 	
+	/*
+	 * This class contains only one test, 
+	 * which tests all parts of controller.
+	 * 
+	 */
 	@Test
 	void testAdditionToTree() {
 		Tweet t = new Tweet();
@@ -22,7 +35,8 @@ public class TestSessionController {
 		t3.setId("1234");
 		t5.setId("557");
 		
-		
+		// Tests the add method of the controller
+		// Which returns true if Id data fits format
 		SessionController sc = new SessionController();
 		assertTrue(sc.addTweetToSampleTree(t));
 		assertFalse(sc.addTweetToSampleTree(t4));
@@ -34,7 +48,7 @@ public class TestSessionController {
 		assertFalse(sc.addTweetToFilteredTree(t4));
 		RedBlackTree<Tweet> rbttest = new RedBlackTree<>();
 		rbttest = sc.getCopyOfOnePercentTweetTree();
-		System.out.println(rbttest.toString());
+		// System.out.println(rbttest.toString());
 				
 		// THIS TEST MAY DEPEND ON INDIVIDUAL RED BLACK TREES
 		// but it shouldn't

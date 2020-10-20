@@ -1,3 +1,11 @@
+// --== CS400 File Header Information ==--
+// Name: Max Roth
+// Email: mroth8@wisc.edu
+// Team: BD
+// Role: Testing
+// TA: Bri Cochran
+// Lecturer: Florian Heimerl
+
 package test.data.resources;
 
 import data.resources.Tweet;
@@ -11,6 +19,10 @@ import java.util.Objects;
 
 public class TestTweet {
 	
+	/*
+	 * This tests the ability of the Tweet objects setters, getters,
+	 * and toString()
+	 */
 	@Test
 	void testTweetObject() {
 		Tweet t = new Tweet();
@@ -50,6 +62,10 @@ public class TestTweet {
 	
 	}
 	
+	/*
+	 * Tests the Tweet object's compareTo() method with same ids,
+	 * differing ids, and wrong data formats
+	 */
 	@Test
 	void testTweetCompareTo() {
 		Tweet t = new Tweet();
@@ -84,7 +100,10 @@ public class TestTweet {
 		
 	}
 		
-		
+	/*
+	 * Tests that the Tweet object equals() method only returns true
+	 * when the two Tweets have the exact same data
+	 */
 	@Test
 	void testTweetEquals() {
 		Tweet t = new Tweet();
