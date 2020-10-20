@@ -730,4 +730,11 @@ public class TwitterAPIService implements TwitterDataAccessInterface {
         return newStatusListener;
     }
 
+    /**
+     * Untested
+     */
+    private void shutdownStream() {
+        ts.shutdown();
+    }
+
 }
