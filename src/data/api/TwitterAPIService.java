@@ -252,11 +252,9 @@ public class TwitterAPIService implements TwitterDataAccessInterface {
 
         String[] trackArray = track.toArray(new String[track.size()]);
         FilterQuery filterQuery = new FilterQuery();
-        filterQuery.track(trackArray[0]);
-        filterQuery.track("cat OR dog");
+        filterQuery.track(trackArray);
 
         twitterStream.addListener(getFilteredStatusListener());
-
         twitterStream.filter(filterQuery);
     }
 
@@ -635,36 +633,36 @@ public class TwitterAPIService implements TwitterDataAccessInterface {
 
             @Override
             public void onStatus(Status status) {
-                System.out.println("@" + status.getUser().getScreenName() + " - " + status.getText());
+                // System.out.println("@" + status.getUser().getScreenName() + " - " + status.getText());
                 Tweet newTweet = parseTweetFromResponse(status);
                 sessionController.addTweetToSampleTree(newTweet);
                 counter++;
-                if (counter >= 1000) { // Gets N tweets before shutting down
-                    System.out.println("Printing Final Tree:");
+                if (counter >= 50000) { // Gets N tweets before shutting down
+                    // System.out.println("Printing Final Tree:");
                     RedBlackTree<Tweet> copiedSampleStream = sessionController.getCopyOfOnePercentTweetTree();
-                    System.out.println(copiedSampleStream.toString());
+                    // System.out.println(copiedSampleStream.toString());
                     ts.shutdown();
                 }
             }
 
             @Override
             public void onDeletionNotice(StatusDeletionNotice statusDeletionNotice) {
-                System.out.println("Got a status deletion notice id:" + statusDeletionNotice.getStatusId());
+                // System.out.println("Got a status deletion notice id:" + statusDeletionNotice.getStatusId());
             }
 
             @Override
             public void onTrackLimitationNotice(int numberOfLimitedStatuses) {
-                System.out.println("Got track limitation notice:" + numberOfLimitedStatuses);
+                // System.out.println("Got track limitation notice:" + numberOfLimitedStatuses);
             }
 
             @Override
             public void onScrubGeo(long userId, long upToStatusId) {
-                System.out.println("Got scrub_geo event userId:" + userId + " upToStatusId:" + upToStatusId);
+                // System.out.println("Got scrub_geo event userId:" + userId + " upToStatusId:" + upToStatusId);
             }
 
             @Override
             public void onStallWarning(StallWarning warning) {
-                System.out.println("Got stall warning:" + warning);
+                // System.out.println("Got stall warning:" + warning);
             }
 
             @Override
@@ -689,36 +687,36 @@ public class TwitterAPIService implements TwitterDataAccessInterface {
 
             @Override
             public void onStatus(Status status) {
-                System.out.println("@" + status.getUser().getScreenName() + " - " + status.getText());
+                // System.out.println("@" + status.getUser().getScreenName() + " - " + status.getText());
                 Tweet newTweet = parseTweetFromResponse(status);
                 sessionController.addTweetToFilteredTree(newTweet);
                 counter++;
-                if (counter >= 5) { // Gets N tweets before shutting down
-                    System.out.println("Printing Final Filtered Tree:");
+                if (counter >= 1000) { // Gets N tweets before shutting down
+                    // System.out.println("Printing Final Filtered Tree:");
                     RedBlackTree<Tweet> copiedSampleStream = sessionController.getCopyOfFilteredTweetTree();
-                    System.out.println(copiedSampleStream.toString());
+                    // System.out.println(copiedSampleStream.toString());
                     ts.shutdown();
                 }
             }
 
             @Override
             public void onDeletionNotice(StatusDeletionNotice statusDeletionNotice) {
-                System.out.println("Got a status deletion notice id:" + statusDeletionNotice.getStatusId());
+                // System.out.println("Got a status deletion notice id:" + statusDeletionNotice.getStatusId());
             }
 
             @Override
             public void onTrackLimitationNotice(int numberOfLimitedStatuses) {
-                System.out.println("Got track limitation notice:" + numberOfLimitedStatuses);
+                // System.out.println("Got track limitation notice:" + numberOfLimitedStatuses);
             }
 
             @Override
             public void onScrubGeo(long userId, long upToStatusId) {
-                System.out.println("Got scrub_geo event userId:" + userId + " upToStatusId:" + upToStatusId);
+                // System.out.println("Got scrub_geo event userId:" + userId + " upToStatusId:" + upToStatusId);
             }
 
             @Override
             public void onStallWarning(StallWarning warning) {
-                System.out.println("Got stall warning:" + warning);
+                // System.out.println("Got stall warning:" + warning);
             }
 
             @Override

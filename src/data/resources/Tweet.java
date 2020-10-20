@@ -147,11 +147,7 @@ public class Tweet implements Comparable<Tweet> {
      */
     @Override
     public int compareTo(@NotNull Tweet o) {
-        System.out.println("In Comparison");
-        System.out.println("ID1: " + this.id);
-        System.out.println("ID2: " + o.id);
         int returnValue = (int) (Long.parseLong(this.id) - Long.parseLong(o.id));
-        System.out.println("Difference: " + returnValue);
         return returnValue;
     }
 

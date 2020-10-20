@@ -1,3 +1,13 @@
+// --== CS400 File Header Information ==--
+// Name: Jacob Lorenz
+// Email: jlorenz2@wisc.edu
+// Team: BD
+// Role: Data Wrangler
+// TA: Brianna Cochran
+// Lecturer: Gary Dahl
+// Notes to Grader: Written by Jacob Lorenz
+//                  This Main.java class is used to showcase the usage of all of the various API wrapper methods
+
 package data;
 
 import data.api.TwitterAPIService;
@@ -113,11 +123,11 @@ public class Main {
             System.out.println();
         });
 
-        //System.out.println("Testing a call to the sample stream.");
-        //apiAccessInterface.getSampleStream();
+        System.out.println("Testing a call to the sample stream.");
+        apiAccessInterface.getSampleStream();
 
         //System.out.println("Testing a call to the filtered stream.");
-        apiAccessInterface.getFilteredStream();
+        // apiAccessInterface.getFilteredStream();
 
     }
 }
