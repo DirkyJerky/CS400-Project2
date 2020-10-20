@@ -34,10 +34,11 @@ import java.nio.file.Paths;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import javax.swing.ScrollPaneConstants;
 
 public class TweetStream {
 
-	private JFrame frame;
+	JFrame frame;
 	private JLabel labelTitle;
 	@SuppressWarnings("rawtypes")
 	private JComboBox comboboxStreamSelector;
@@ -47,26 +48,10 @@ public class TweetStream {
 	private JFilteredTextField textGotoN;
 	private JPlaceholderTextField textFilterText;
 	private RulePanel panelRules;
-	private JStatusBar labelStatus;
+	JStatusBar labelStatus;
 	private TweetViewerPanel panelTweetViewer;
 	
 	static String STATE_FILE = "appstate.txt";
-	
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					TweetStream window = new TweetStream();
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	public TweetStream() {
 		initialize();
@@ -150,7 +135,7 @@ public class TweetStream {
 			public void actionPerformed(ActionEvent event) {
 				if (event.getActionCommand() == startText) {
 					try {
-						// TODO Test if the app is ready to go
+						testAppReadiness(); // Will throw exception if something isn't ready.
 						
 						String rule = (streamNeedsRule()) ? panelRules.buildRule() : ""; // Will throw exception if rule not valid/complete
 						
@@ -163,8 +148,9 @@ public class TweetStream {
 						EventQueue.invokeLater(new Runnable() {
 							public void run() {
 								try {
-									// TODO:  Start streaming, then wait till we are running
 									// TODO:  Do stuff with this rule
+									//        Start streaming
+									//        Wait till we are running
 									labelStatus.info("Streaming with rule: " + rule);
 									
 									buttonStreamToggle.setText(stopText);
@@ -249,6 +235,7 @@ public class TweetStream {
 					timerToEnable.start();
 					
 					panelTweetViewer.clearTweets();
+					// TODO:  Clear tweets from backend
 				}
 			}
 		});
@@ -280,6 +267,8 @@ public class TweetStream {
 						panelTweetViewer.gotoN(Integer.parseInt(textGotoN.getText()));
 					} catch (NumberFormatException e) {
 						System.err.println("textGotoN invalid int after isFieldValid() true (this shouldnt ever happen)");
+					} catch (IllegalStateException e) {
+						labelStatus.error(e.getMessage());
 					}
 				} else {
 					textGotoN.validateField();
@@ -320,8 +309,12 @@ public class TweetStream {
 		
 		labelStatus = new JStatusBar();
 		rightsidePanel.add(labelStatus, BorderLayout.NORTH);
+
+//		panelTweetViewer = new TweetViewerPanel();
+//		rightsidePanel.add(panelTweetViewer, BorderLayout.CENTER);
 		
 		JScrollPane scrollpaneTweetViewer = new JScrollPane();
+		scrollpaneTweetViewer.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
 		rightsidePanel.add(scrollpaneTweetViewer, BorderLayout.CENTER);
 		
 		panelTweetViewer = new TweetViewerPanel();
@@ -334,6 +327,12 @@ public class TweetStream {
 		
 		this.readStateFromFile();
 	}
+	
+	private void testAppReadiness() throws IllegalStateException {
+		// TODO  Check for app readiness
+	}
+
+	
 	
 	private boolean streamNeedsRule() {
 		return (StreamSource) this.comboboxStreamSelector.getSelectedItem() == StreamSource.FILTERED;
