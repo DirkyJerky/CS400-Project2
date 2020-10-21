@@ -11,6 +11,9 @@ import java.awt.GridBagConstraints;
 
 import javax.swing.JPanel;
 
+import RBTree.RedBlackTree;
+import data.resources.Tweet;
+
 import java.awt.GridBagLayout;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
@@ -106,7 +109,7 @@ public class TweetViewerPanel extends JPanel {
 	// If n = -1, shortcut to get the newest tweets instead
 	public void gotoN(int n) {
 		
-		int numTweetsRecieved = 0; // TODO:  Get from backend
+		int numTweetsRecieved = TweetStream.sessionController.getSizeOfOnePercentTweetTree(); // TODO:  Get from backend
 		
 		// If n is negative, make it index from the end of the list of tweets.
 		if (n < 0) {
@@ -127,10 +130,42 @@ public class TweetViewerPanel extends JPanel {
 		
 		System.err.println("Going to Nth tweet: n=" + n);
 		
+		int numToGet = this.tweetPanels.size();
+		
+		if (n == numTweetsRecieved - 1) {
+			n -= numToGet - 1;
+		}
+		
+		RedBlackTree<Tweet> tweetTree = TweetStream.sessionController.getCopyOfOnePercentTweetTree();
+		
+		for (int i = 0; i < numToGet; i += 1) {
+			Tweet tweet = getIndexedTweetFromTree(tweetTree.root, i + n);
+			
+			this.tweetPanels.get(i).setTweetObj(tweet);
+		}
+		
+		this.repaint();
+		
 		// TODO Get tweets from index `n`, number_to_get = this.tweetPanels.size()
 		//      If n == numTweetsRecieved - 1 (getting last tweet), get the newest tweets instead
 		//      For i = 0..number_to_get
 		//          this.tweetPanels.get(i).setTweetObj(tweets.get(i));
 		//      this.repaint();
+	}
+
+	private static Tweet getIndexedTweetFromTree(RedBlackTree.Node<Tweet> tweetTree, int i) {
+		if (tweetTree == null || tweetTree.data == null) {
+			return null;
+		}
+		
+		int cmp = tweetTree.data.getTreeIndex() - i;
+		
+		if (cmp == 0) {
+			return tweetTree.data;
+		} else if (cmp > 0 ) {
+			return getIndexedTweetFromTree(tweetTree.leftChild, i);
+		} else {
+			return getIndexedTweetFromTree(tweetTree.rightChild, i);
+		}
 	}
 }

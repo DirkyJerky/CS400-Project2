@@ -23,6 +23,10 @@ import javax.swing.JToggleButton;
 import javax.swing.SwingConstants;
 import javax.swing.Timer;
 
+import data.TwitterDataAccessInterface;
+import data.api.TwitterAPIService;
+import data.controllers.SessionController;
+
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
@@ -41,6 +45,7 @@ import java.nio.file.Paths;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+
 import javax.swing.ScrollPaneConstants;
 
 public class TweetStream {
@@ -58,17 +63,23 @@ public class TweetStream {
 	JStatusBar labelStatus;
 	private TweetViewerPanel panelTweetViewer;
 	
+	static SessionController sessionController;
+	static TwitterDataAccessInterface dataInterface;
+	
 	static String STATE_FILE = "appstate.txt";
 
 	public TweetStream() {
-		initialize();
+		initializeGUI();
+		
+		sessionController = new SessionController();
+		dataInterface = new TwitterAPIService();
 	}
 
 	/**
 	 * Initialize the contents of the frame.
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" }) // My GUI builder doesn't like parameterized combo boxes
-	private void initialize() {
+	private void initializeGUI() {
 		frame = new JFrame();
 		frame.setBounds(100, 100, 450, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -142,9 +153,11 @@ public class TweetStream {
 			public void actionPerformed(ActionEvent event) {
 				if (event.getActionCommand() == startText) {
 					try {
-						testAppReadiness(); // Will throw exception if something isn't ready.
 						
+						@SuppressWarnings("unused")
 						String rule = (streamNeedsRule()) ? panelRules.buildRule() : ""; // Will throw exception if rule not valid/complete
+						
+						testAppReadiness(); // Will throw exception if something isn't ready.
 						
 						buttonStreamToggle.setEnabled(false);
 						buttonStreamToggle.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
@@ -158,7 +171,19 @@ public class TweetStream {
 									// TODO:  Do stuff with this rule
 									//        Start streaming
 									//        Wait till we are running
-									labelStatus.info("Streaming with rule: " + rule);
+									
+									switch ((StreamSource) comboboxStreamSelector.getSelectedItem()) {
+									
+									case FILTERED: {
+										throw new IllegalStateException("Filtered stream unimplemented");
+									}
+									
+									case SAMPLE: {
+										labelStatus.info("Streaming sampled tweets");
+										dataInterface.getSampleStream();
+									}
+									}
+									
 									
 									buttonStreamToggle.setText(stopText);
 									buttonStreamToggle.setEnabled(true);
@@ -188,6 +213,7 @@ public class TweetStream {
 						public void run() {
 							try {
 								// TODO:  Wait till we have stopped streaming
+								labelStatus.info("Stopping the stream currently unimplemented");
 								
 								buttonStreamToggle.setText(startText);
 								buttonStreamToggle.setEnabled(true);
@@ -196,6 +222,7 @@ public class TweetStream {
 								comboboxStreamSelector.setEnabled(true);
 								panelRules.requestSetEnabled(0b0010, true);
 							} catch (Exception e) {
+								labelStatus.error(e.getMessage());
 								e.printStackTrace();
 							}
 						}
@@ -242,7 +269,9 @@ public class TweetStream {
 					timerToEnable.start();
 					
 					panelTweetViewer.clearTweets();
-					// TODO:  Clear tweets from backend
+					
+					sessionController.clearFilteredTree();
+					sessionController.clearSampleTree();
 				}
 			}
 		});
@@ -336,7 +365,9 @@ public class TweetStream {
 	}
 	
 	private void testAppReadiness() throws IllegalStateException {
-		// TODO  Check for app readiness
+		if (streamNeedsRule()) {
+			throw new IllegalStateException("Filtered stream is currently unimplemented fully, try using the Sample Stream instead.");
+		}
 	}
 
 	

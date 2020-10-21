@@ -16,12 +16,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import data.resources.Tweet;
+
 @SuppressWarnings("serial")
 public class TweetPanel extends JPanel {
-	// TODO:  Use the real class to interact with rest of application
-	public static class BackendTweet {
-		BackendTweet() {}
-	}
 	
 	static int PREFERRED_HEIGHT = 15;
 	static int PREFERRED_WIDTH = 990;
@@ -41,7 +39,7 @@ public class TweetPanel extends JPanel {
 		fillGBC.fill = GridBagConstraints.BOTH;
 	}
 	
-	BackendTweet tweetObj;
+	Tweet tweetObj;
 	
 	JTextField usernameField;
 	JTextField tweetField;
@@ -50,7 +48,7 @@ public class TweetPanel extends JPanel {
 		this(null);
 	}
 	
-	public TweetPanel(BackendTweet fromTweet) {
+	public TweetPanel(Tweet fromTweet) {
 		super();
 
 		this.setPreferredSize(new Dimension(PREFERRED_WIDTH, PREFERRED_HEIGHT));
@@ -78,21 +76,21 @@ public class TweetPanel extends JPanel {
 	}
 
 	
-	public BackendTweet getTweetObj() {
+	public Tweet getTweetObj() {
 		return tweetObj;
 	}
 
-	public void setTweetObj(BackendTweet tweetObj) {
+	public void setTweetObj(Tweet tweetObj) {
 		this.tweetObj = tweetObj;
-//		boolean objIsValid = this.tweetObj != null;
-		boolean objIsValid = true; // TODO:  Replace with above line
+		boolean objIsValid = this.tweetObj != null;
 		
 		for (Component comp : this.getComponents()) {
 			comp.setVisible(objIsValid);
 		}
 		
 		if (objIsValid) {
-			// TODO: Set usernameField, tweetField according to this.tweetObj
+			this.usernameField.setText(this.tweetObj.getUser().getName());
+			this.tweetField.setText(this.tweetObj.getText());
 		}
 		
 		this.repaint();
