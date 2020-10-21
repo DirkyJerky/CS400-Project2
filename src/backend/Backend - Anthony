@@ -1,0 +1,94 @@
+
+// --== CS400 File Header Information ==--
+// Name: Anthony Giunta
+// Email: agiunta@wisc.edu
+// Team: BD
+// Role: Backend
+// TA: Brianna Cochran
+// Lecturer: Florian Hiemerl
+
+import java.util.List;
+import java.util.Set;
+
+public class Tweet {
+	// Return a list of tweets posted between 2 timestamps
+	public List<Tweet> getTweetsByTimestamp (Timestamp startTimestamp, Timestamp endTimestamp){
+		
+	}
+
+	// Return a list of n most recent tweets
+	public List<Tweet> getNNewestTweets(int n){
+		
+		return null;
+		
+	}
+
+	// Return a list of n oldest tweets
+	public List<Tweet> getNOldestTweets(int n){
+		return null;
+		
+	}
+
+	// Return a list of n tweets starting at the startIndex
+	public List<Tweet> getNIndexedTweets(int n, int startIndex){
+		return null;
+		
+	}
+
+	// Return the tweets composed by author
+	public List<Tweet> getTweetsByTwitterUsername(String username){
+		return null;
+		
+	}
+
+	// Return a list of tweets matching the provided topic
+	public List<Tweet> getTweetsByTopic(String topic){
+		return null;
+		
+	}
+
+	// Return a list of Tweets matching the provided filters
+	public List<Tweet> getTweetsByFilters(Set<String> usernameFilters, Set<String> topicFilters){
+		return null;
+		
+	}
+
+	// Add a topic to the set of topic filters
+	public boolean addTopicToFilterSet(String topic) {
+		return topic != null;
+		
+	}
+
+
+	// Add an username to the set of username filters
+	public boolean addUsernameToFilterSet(String username) {
+		return username != null;
+		
+	}
+
+	// Clear all filters on topics
+	public void clearAllTopicFilters() {
+		
+	}
+
+	// Clear all filters on usernames
+	public void clearAllUsernameFilters() {
+		
+	}
+
+	// Clear a set of topic filters
+	public void removeTopicFilters(Set<String> topics) {
+		
+	}
+
+	// Clear a set of username filters
+	public void removeUsernameFilters(Set<String> usernames) {
+		
+	}
+
+	// Retrieve details about a TwitterUser
+	public TwitterUser getTwitterUserDetails(String username) {
+		
+	}
+
+}
