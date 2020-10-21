@@ -639,7 +639,7 @@ public class TwitterAPIService implements TwitterDataAccessInterface {
                 Tweet newTweet = parseTweetFromResponse(status);
                 sessionController.addTweetToSampleTree(newTweet);
                 counter++;
-                if (counter >= 50000) { // Gets N tweets before shutting down
+                if (counter >= 10000) { // Gets N tweets before shutting down
                     // System.out.println("Printing Final Tree:");
                     RedBlackTree<Tweet> copiedSampleStream = sessionController.getCopyOfOnePercentTweetTree();
                     // System.out.println(copiedSampleStream.toString());

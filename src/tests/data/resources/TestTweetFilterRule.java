@@ -1,9 +1,8 @@
-package test.data.resources;
+package tests.data.resources;
 
 import data.resources.TweetFilterRule;
-
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.BeforeEach;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestTweetFilterRule {

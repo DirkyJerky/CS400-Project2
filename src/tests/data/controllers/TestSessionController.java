@@ -1,4 +1,4 @@
-package test.data.controllers;
+package tests.data.controllers;
 
 import data.resources.Tweet;
 import data.controllers.SessionController;
