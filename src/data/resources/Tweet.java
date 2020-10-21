@@ -32,12 +32,19 @@ public class Tweet implements Comparable<Tweet> {
     private TwitterUser user;
     private String created_at;
     private String conversation_id;
+    private int treeIndex;
 
     /**
      * Default Constructor
      */
     public Tweet() {
-
+        this.id = null;
+        this.text = null;
+        this.author_id = null;
+        this.user = null;
+        this.created_at = null;
+        this.conversation_id = null;
+        this.treeIndex = -1;
     }
 
     /**
@@ -137,7 +144,23 @@ public class Tweet implements Comparable<Tweet> {
     }
 
     /**
-     * Returns an integer corresponding to the relationship between the Tweet's ids:
+     * Returns the index of this Tweet within its respective tree
+     * @return the int index of the Tweet in the Red Black Tree
+     */
+    public int getTreeIndex() {
+        return treeIndex;
+    }
+
+    /**
+     * Set the index of this Tweet within its respective tree
+     * @param treeIndex the int index of the Tweet in the Red Black Tree
+     */
+    public void setTreeIndex(int treeIndex) {
+        this.treeIndex = treeIndex;
+    }
+
+    /**
+     * Returns an integer corresponding to the relationship between the Tweet's Tree Indices:
      *
      * -N if the comparing integer is less than the Tweet being compared
      * +N if the comparing integer is greater than the Tweet being compared
@@ -147,7 +170,7 @@ public class Tweet implements Comparable<Tweet> {
      */
     @Override
     public int compareTo(@NotNull Tweet o) {
-        int returnValue = (int) (Long.parseLong(this.id) - Long.parseLong(o.id));
+        int returnValue = this.treeIndex - o.treeIndex;
         return returnValue;
     }
 
