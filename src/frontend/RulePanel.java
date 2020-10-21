@@ -21,6 +21,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.awt.event.ActionEvent;
 
+/**
+ * A scrollable collection of RuleOperatorPanels, with a button to add new operator panels.
+ */
 @SuppressWarnings("serial")
 public class RulePanel extends JPanel {
 	private static final int MAX_OPERATORS = 25;
@@ -72,6 +75,9 @@ public class RulePanel extends JPanel {
 		this.resyncOperators();
 	}
 	
+	/**
+	 * Add a new operator panel
+	 */
 	public void addNewOperator() {
 		RuleOperatorPanel newRule = new RuleOperatorPanel();
 		
@@ -82,7 +88,7 @@ public class RulePanel extends JPanel {
 		this.operators.get(this.operators.size() - 1).comboboxSelectRuleType.requestFocus();
 	}
 	
-	// Re-add all the operator objects in order
+	// Re-add all the operator objects in order, then repaint
 	private void resyncOperators() {
 		this.removeAll();
 		
@@ -99,6 +105,9 @@ public class RulePanel extends JPanel {
 		this.repaint();
 	}
 
+	/**
+	 * @param operatorPanel The panel to remove
+	 */
 	public void removeRuleOperator(RuleOperatorPanel operatorPanel) {
 		if (this.operators.remove(operatorPanel)) {
 			this.resyncOperators();
@@ -135,7 +144,10 @@ public class RulePanel extends JPanel {
 		}
 	}
 	
-	// Create one single query object.
+	/**
+	 * @return The rule query string built from all the enclosing rule components
+	 * @throws IllegalStateException If any of the operators are invalid, or the rule is too big.
+	 */
 	public String buildRule() throws IllegalStateException {
 		StringBuilder builder = new StringBuilder();
 		
@@ -150,7 +162,9 @@ public class RulePanel extends JPanel {
 		return builder.toString();
 	}
 	
-	// Highlight first invalid rule operator
+	/**
+	 * Highlight first invalid rule operator
+	 */
 	public void focusInvalidOperator() {
 		for (RuleOperatorPanel operator : this.operators) {
 			if (!operator.filteredTextField.isFieldValid()) {

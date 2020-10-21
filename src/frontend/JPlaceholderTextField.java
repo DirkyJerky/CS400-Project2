@@ -13,19 +13,30 @@ import java.awt.RenderingHints;
 
 import javax.swing.JTextField;
 
-// Sourced from https://stackoverflow.com/questions/16213836
+/**
+ * JTextField that displays a placeholder text when the field is empty
+ * 
+ * Sourced from https://stackoverflow.com/questions/16213836
+ */
 @SuppressWarnings("serial")
 public class JPlaceholderTextField extends JTextField {
 	private String placeholder;
 
+	/**
+	 * @return The current placeholder
+	 */
 	public String getPlaceholder() {
 		return placeholder;
 	}
 
+	/**
+	 * @param placeholder The new placeholder
+	 */
 	public void setPlaceholder(String placeholder) {
 		this.placeholder = placeholder;
 	}
 	
+	// Selectively paints the placeholder
     @Override
     protected void paintComponent(final Graphics pG) {
         super.paintComponent(pG);

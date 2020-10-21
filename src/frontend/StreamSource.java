@@ -12,6 +12,12 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 //TODO:  Extend from/replace with what the other application creators provide.
+/**
+ * An enum representing the possible stream sources.
+ * - Sample stream returns 1% of all public tweets
+ * - (unimplemented) Filtered stream returns a filtered stream of tweets according to a filter.
+ *
+ */
 public enum StreamSource {
 	FILTERED("Filtered stream"),
 	SAMPLE("1% Sample stream");

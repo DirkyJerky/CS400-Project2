@@ -9,6 +9,9 @@ package frontend;
 
 import java.awt.EventQueue;
 
+/**
+ * Run the application!
+ */
 public class Main {
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {

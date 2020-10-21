@@ -24,7 +24,14 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.awt.event.ActionEvent;
 
-// unchecked, rawtype suppression because my GUI builder doesn't like when I (properly) use the generic version of JComboBox
+
+/**
+ * A JPanel containing
+ *  - A combo box for selecting rule operator type
+ *  - A JFilteredTextField for containing the operators contents, the field performs validation according to the selected operator type
+ *  - A button to remove this operator.
+ */
+//unchecked, rawtype suppression because my GUI builder doesn't like when I (properly) use the generic version of JComboBox
 @SuppressWarnings({ "serial", "unchecked", "rawtypes" }) 
 public class RuleOperatorPanel extends JPanel {
 	
@@ -97,6 +104,10 @@ public class RuleOperatorPanel extends JPanel {
 		return (OperatorType) this.comboboxSelectRuleType.getSelectedItem();
 	}
 	
+	/**
+	 * @return The textual representation of the enclosing operator, for use in building a filter query rule.
+	 * @throws IllegalStateException If the the operator is invalid (text field incorrect)
+	 */
 	public String toRuleComponent() throws IllegalStateException {
 		if (!this.isFieldValid()) {
 			throw new IllegalStateException("Invalid operator value for " + this.getSelectedOperatorType().toString() + ": " + this.filteredTextField.getText());

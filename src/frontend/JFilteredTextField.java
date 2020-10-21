@@ -17,8 +17,15 @@ import javax.swing.text.Document;
 import javax.swing.text.DocumentFilter;
 import javax.swing.text.PlainDocument;
 
+/**
+ * An extended functionality JTextField that implements filtering on what can be inputted
+ * 
+ * Each instance has a corresponding FilterType, which will restrict what can be entered, and provide
+ * visual feedback when the current contents of the field are not valid according to the filter.
+ */
 @SuppressWarnings("serial")
 public class JFilteredTextField extends JTextField {
+	// See comments for the particular filter details
 	public enum FilterType {
 		NUMERICAL, // Number, positive or negative
 		NORMAL, // No restrictions
@@ -91,6 +98,9 @@ public class JFilteredTextField extends JTextField {
 	FilterType filterType;
 	CustomFilter docFilter;
 
+	/**
+	 * @param filterType The type of filter to use for this text field
+	 */
 	public JFilteredTextField(FilterType filterType) {
 		super();
 		
@@ -101,10 +111,17 @@ public class JFilteredTextField extends JTextField {
 		doc.setDocumentFilter(this.docFilter);
 	}
 
+	/**
+	 * @return The fields current filter type
+	 */
 	public FilterType getFilterType() {
 		return this.filterType;
 	}
 
+	/**
+	 * Update the filter type, and revalidate the field.
+	 * @param filterType The new filter type
+	 */
 	public void updateFilterType(FilterType filterType) {
 		this.filterType = filterType;
 		
@@ -113,13 +130,18 @@ public class JFilteredTextField extends JTextField {
 		this.validateField();
 	}
 	
+	/**
+	 * @return If the field's contents are valid according to the filter.
+	 */
 	public boolean isFieldValid() {
 		return this.getText() != null 
 				&& this.getText().length() > 0 
 				&& this.filterType.test(this.getText());
 	}
 	
-	// Color field red if its invalid
+	/**
+	 * Hints the field to give visual feedback if the current contents are invalid
+	 */
 	public void validateField() {
 		if (this.isFieldValid() || !this.isEnabled()) {
 			this.setBackground(Color.WHITE);

@@ -20,6 +20,10 @@ import java.awt.event.ComponentListener;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A collection of TweetPanels, with methods for retrieval and scrolling to specific indexed tweets.
+ * The amount of tweets that can be contained within will dynamically change on resize.
+ */
 @SuppressWarnings("serial")
 public class TweetViewerPanel extends JPanel {
 	JPanel fillerComp;
@@ -67,7 +71,11 @@ public class TweetViewerPanel extends JPanel {
 		});
 	}
 	
-	// Run after the layout manager has packed the component, or after resize
+	/**
+	 * Setup all the internal TweetPanels according to our current size.
+	 * 
+	 * Run after the layout manager has packed the component, or after resize
+	 */
 	public void populateTweetPanels() {
 		int thisHeight = this.getParent().getSize().height;
 		
@@ -87,6 +95,9 @@ public class TweetViewerPanel extends JPanel {
 		}
 	}
 	
+	/**
+	 * Readd all the tweet panels in order.
+	 */
 	private void resyncTweetPanels() {
 		this.removeAll();
 		
@@ -100,13 +111,19 @@ public class TweetViewerPanel extends JPanel {
 		this.repaint();
 	}
 	
+	/**
+	 * Clear all visible tweets.
+	 */
 	public void clearTweets() {
 		this.tweetPanels.forEach((tweetPanel) -> tweetPanel.setTweetObj(null));
 		this.scrollIndex = -1;
 	}
 	
-	// Scroll to the Nth tweet
-	// If n = -1, shortcut to get the newest tweets instead
+	/**
+	 * Set the set of tweets being viewed to the list that starts at the index `n`
+	 * If `n` is negative, index from the end of the list instead (-1 is the newest set of tweets)
+	 * @param n The new index to scroll this viewer to.
+	 */
 	public void gotoN(int n) {
 		
 		int numTweetsRecieved = TweetStream.sessionController.getSizeOfOnePercentTweetTree(); // TODO:  Get from backend

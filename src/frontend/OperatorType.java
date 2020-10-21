@@ -14,6 +14,12 @@ import java.io.PrintWriter;
 import frontend.JFilteredTextField.FilterType;
 
 // TODO:  Extend from/replace with what the other application creators provide.
+/**
+ * (Unfinished)
+ * 
+ * Represents a type of operator used in the search queries for the filtered streaming endpoint
+ * Several operators can be combined to form one "rule".
+ */
 enum OperatorType {
 	KEYWORD("Keyword", "", FilterType.NORMAL),
 	HASHTAG("Hashtag (#)", "#", FilterType.HASHTAG),

@@ -12,6 +12,11 @@ import java.awt.Color;
 import javax.swing.JLabel;
 import javax.swing.Timer;
 
+/**
+ * A JLabel with methods for setting the text at varying levels of error (error, warn, info)
+ * The text is displayed for a time period proportional to its length, then the label is cleared.
+ *
+ */
 @SuppressWarnings("serial")
 public class JStatusBar extends JLabel {
 	static Color infoColor = new Color(225, 225, 225);
@@ -30,6 +35,9 @@ public class JStatusBar extends JLabel {
 		timerToReset.setRepeats(false);
 	}
 	
+	/**
+	 * @param text Text to be displayed at info level (minimal background)
+	 */
 	public void info(String text) {
 		this.setText(text);
 		this.setBackground(infoColor);
@@ -37,6 +45,9 @@ public class JStatusBar extends JLabel {
 		this.restartTimer(text.length());
 	}
 	
+	/**
+	 * @param text Text to be displayed at warning level (light yellow background)
+	 */
 	public void warn(String text) {
 		this.setText(text);
 		this.setBackground(warningColor);
@@ -44,6 +55,9 @@ public class JStatusBar extends JLabel {
 		this.restartTimer(text.length());
 	}
 	
+	/**
+	 * @param text Text to be displayed at error level (light red background)
+	 */
 	public void error(String text) {
 		this.setText(text);
 		this.setBackground(errorColor);

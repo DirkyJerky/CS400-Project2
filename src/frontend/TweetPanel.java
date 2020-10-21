@@ -18,6 +18,10 @@ import javax.swing.JTextField;
 
 import data.resources.Tweet;
 
+/**
+ * A JPanel used for displaying a single tweet.
+ * Displays the username, and tweet contents in uneditable text fields.
+ */
 @SuppressWarnings("serial")
 public class TweetPanel extends JPanel {
 	
@@ -80,6 +84,10 @@ public class TweetPanel extends JPanel {
 		return tweetObj;
 	}
 
+	/**
+	 * @param tweetObj The tweet object to associate with this panel
+	 * If tweetObj is null, the panel will make itself invisible.
+	 */
 	public void setTweetObj(Tweet tweetObj) {
 		this.tweetObj = tweetObj;
 		boolean objIsValid = this.tweetObj != null;
