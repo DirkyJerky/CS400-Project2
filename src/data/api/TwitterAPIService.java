@@ -637,6 +637,7 @@ public class TwitterAPIService implements TwitterDataAccessInterface {
             public void onStatus(Status status) {
                 // System.out.println("@" + status.getUser().getScreenName() + " - " + status.getText());
                 Tweet newTweet = parseTweetFromResponse(status);
+                newTweet.setTreeIndex(sessionController.getSizeOfOnePercentTweetTree());
                 sessionController.addTweetToSampleTree(newTweet);
                 counter++;
                 if (counter >= 10000) { // Gets N tweets before shutting down
@@ -691,6 +692,7 @@ public class TwitterAPIService implements TwitterDataAccessInterface {
             public void onStatus(Status status) {
                 // System.out.println("@" + status.getUser().getScreenName() + " - " + status.getText());
                 Tweet newTweet = parseTweetFromResponse(status);
+                newTweet.setTreeIndex(sessionController.getSizeOfFilteredTweetTree());
                 sessionController.addTweetToFilteredTree(newTweet);
                 counter++;
                 if (counter >= 1000) { // Gets N tweets before shutting down

@@ -33,6 +33,9 @@ public class SessionController {
     private static RedBlackTree<Tweet> FilteredTweetTree
             = new RedBlackTree<>();
 
+    private static int OnePercentSize = 0;
+    private static int FilteredSize = 0;
+
     /**
      * Default Constructor
      */
@@ -51,6 +54,7 @@ public class SessionController {
         }
         try {
             OnePercentSampleTweetTree.insert(tweet);
+            OnePercentSize++;
             return true;
         } catch (IllegalArgumentException | NullPointerException e) {
             return false;
@@ -68,6 +72,7 @@ public class SessionController {
         }
         try {
             FilteredTweetTree.insert(tweet);
+            FilteredSize++;
             return true;
         } catch (IllegalArgumentException | NullPointerException e) {
             return false;
@@ -79,6 +84,7 @@ public class SessionController {
      */
     public void clearSampleTree() {
         OnePercentSampleTweetTree = new RedBlackTree<>();
+        OnePercentSize = 0;
     }
 
     /**
@@ -86,6 +92,7 @@ public class SessionController {
      */
     public void clearFilteredTree() {
         FilteredTweetTree = new RedBlackTree<>();
+        FilteredSize = 0;
     }
 
     /**
@@ -104,5 +111,21 @@ public class SessionController {
     public RedBlackTree<Tweet> getCopyOfFilteredTweetTree() {
         RedBlackTree<Tweet> copy = FilteredTweetTree;
         return copy;
+    }
+
+    /**
+     * Returns the current size of the OnePercentSampleTweetTree
+     * @return current size (int) of the OnePercentSampleTweetTree
+     */
+    public int getSizeOfOnePercentTweetTree() {
+        return OnePercentSize;
+    }
+
+    /**
+     * Returns the current size of the FilteredTweetTree
+     * @return current size (int) of the FilteredTweetTree
+     */
+    public int getSizeOfFilteredTweetTree() {
+        return FilteredSize;
     }
 }
