@@ -66,4 +66,98 @@ public Value get(Key key) {
     public boolean contains(Key key) {
         return get(key) != null;
     }
+    /***************************************************************************
+     *  Red-black tree insertion.
+     ***************************************************************************/
+    public void put(Key key, Value val) throws IllegalAccessException {
+        if (key == null)
+            throw new IllegalAccessException("first argument to put() is null");
+        if (val == null) {
+            delete(key);
+            return;
+        }
+
+        root = put(root, key, val);
+        root.color = BLACK;
+    }
+
+    private Node put(Node h, Key key, Value val) {
+        if(h == null)
+            return new Node(key, val, RED, 1);
+
+        int cmp = key.compareTo(h.key);
+        if (cmp < 0)
+            h.left = put(h.left, key, val);
+        else if (cmp > 0)
+            h.right = put(h.right, key, val);
+        else
+            h.val = val;
+
+        //right-leaning links
+        if (isRed(h.right) && !isRed(h.left))
+            h = rotateLeft(h);
+        if (isRed(h.left) && isRed(h.left.left))
+            h = rotateRight(h);
+        if (isRed(h.left) && isRed(h.right))
+            flipColors(h);
+        h.size = size(h.left) + size(h.right) + 1;
+
+        return h;
+    }
+    /***************************************************************************
+     *  Red-black tree deletion.
+     ***************************************************************************/
+    private void deleteMin() { if (isEmpty()) throw new NoSuchElementException("BST underflow")
+        private void delete(Key key) {
+            if (h.left == null)
+                return null;
+
+            if (!isRed(h.left) && !isRed(h.left.left))
+                h = moveRedLeft(h);
+
+            h.left = deleteMin(h.left);
+            return balance;
+        }
+
+        private Node deleteMax(Node h) {
+            if (isRed(h.left))
+                h = rotateRight(h);
+
+            if (h.right == null)
+                return null;
+
+            if (!isRed(h.right) && !isRed(h.right.left))
+                h = moveRedRight(h);
+
+            h.right = deleteMax(h.right);
+
+            return balance(h);
+        }
+
+        private void flipColors(Node h) {
+            h.color = !h.color;
+            h.left.color = !h.left.color;
+            h.right.color = !h.right.color;
+        }
+        private Node rotateRight(Node h) {
+            Node x = h.left;
+            h.left = x.right;
+            x.right = h;
+            x.color = x.right.color;
+            x.right.color = RED;
+            x.size = h.size;
+            h.size = size(h.left) + size(h.right) + 1;
+            return x;
+        }
+
+        private Node rotateLeft(Node h) {
+            Node x = h.right;
+            h.right = x.left;
+            x.left = h;
+            x.color = x.left.color;
+            x.left.color = RED;
+            x.size = h.size;
+            h.size = size(h.left) + size(h.right) + 1;
+            return x;
+        }
 }
