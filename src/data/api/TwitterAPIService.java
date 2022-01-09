@@ -40,11 +40,11 @@ public class TwitterAPIService implements TwitterDataAccessInterface {
      * Private Variables used for HTTP routing and authorization
      */
     private final String BASE_URL = "https://api.twitter.com";
-    private static final String consumerKey = "LtG6jpBInaEduKkkQmQCw5sso";
-    private static final String consumerSecret = "ntqqLEGyBJsGbMi6kdybC7lUBlJKsZ1RuRa8lFbMXLCHEh7VWD";
-    private static final String token = "1312243397688782850-MQmWy3OJN30ofo5FZx6w73rkNMoAkK";
-    private static final String tokenSecret = "jnRSAHWwdLmQm0HVW9OOfxD2O8aVJL14r5Uv0l8d2OuB7";
-    private static final String bearerToken = "AAAAAAAAAAAAAAAAAAAAAJgiIQEAAAAASKsySmauclKIif2r1nVEQzley5w%3DYCjJQMOgBwX3qoLummZYAuOAVx32ehjuK5DBZoM4ntGa84DtPV";
+    private static final String consumerKey = "i1KMNeSaUpoeDNjUQvEaCobg2";
+    private static final String consumerSecret = "UfIwgTghwfU8L0UgIllbeSx5SdGpgNnW2w5ZS9Irfa5eCLliNd";
+    private static final String token = "738133385525108741-XurRAuwPzKn1lWPSRjJQMSU0ySbaQyD";
+    private static final String tokenSecret = "wM0lQSzOseuVCDRYAhbz2lKHWJWmT3oC4QCNFg78ydG6T";
+    private static final String bearerToken = "AAAAAAAAAAAAAAAAAAAAAHBEIQEAAAAA4h%2FND%2BnJU7GX5GrhTVAI8NxJNOc%3DLqvmfOlXgaMQ9c64G03cTAFN2SykSMxbMKtb3UAaKqefsYixH6";
 
     /**
      * Private class instance references used to manage the core of the app's data

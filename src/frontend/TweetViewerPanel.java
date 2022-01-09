@@ -145,7 +145,7 @@ public class TweetViewerPanel extends JPanel {
 		
 		this.scrollIndex = n;
 		
-		System.err.println("Going to Nth tweet: n=" + n);
+//		System.err.println("Going to Nth tweet: n=" + n);
 		
 		int numToGet = this.tweetPanels.size();
 		
