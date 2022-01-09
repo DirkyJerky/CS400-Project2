@@ -38,13 +38,14 @@ public class TwitterAPIService implements TwitterDataAccessInterface {
 
     /**
      * Private Variables used for HTTP routing and authorization
+	 * They're already deactive, nice try any who want to use them :P
      */
     private final String BASE_URL = "https://api.twitter.com";
-    private static final String consumerKey = "i1KMNeSaUpoeDNjUQvEaCobg2";
-    private static final String consumerSecret = "UfIwgTghwfU8L0UgIllbeSx5SdGpgNnW2w5ZS9Irfa5eCLliNd";
-    private static final String token = "738133385525108741-XurRAuwPzKn1lWPSRjJQMSU0ySbaQyD";
-    private static final String tokenSecret = "wM0lQSzOseuVCDRYAhbz2lKHWJWmT3oC4QCNFg78ydG6T";
-    private static final String bearerToken = "AAAAAAAAAAAAAAAAAAAAAHBEIQEAAAAA4h%2FND%2BnJU7GX5GrhTVAI8NxJNOc%3DLqvmfOlXgaMQ9c64G03cTAFN2SykSMxbMKtb3UAaKqefsYixH6";
+    private static final String consumerKey = "";
+    private static final String consumerSecret = "";
+    private static final String token = "";
+    private static final String tokenSecret = "";
+    private static final String bearerToken = "";
 
     /**
      * Private class instance references used to manage the core of the app's data
